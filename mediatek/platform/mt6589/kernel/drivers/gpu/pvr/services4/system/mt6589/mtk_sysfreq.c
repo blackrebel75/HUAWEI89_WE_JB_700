@@ -55,8 +55,8 @@ PVRSRV_ERROR MTKSetFreqInfo(unsigned int freq, unsigned int tbltype)
 
     printk(" freq= %d", freq);
 #if defined(MTK_FORCE_T)
-    freq = GPU_DVFS_F3;
-    tbltype = TBLTYPE1;
+    freq = GPU_DVFS_F1;
+    tbltype = TBLTYPE3;
 #endif
 #if defined(MTK_FORCE_M)
     freq = GPU_DVFS_F7;
@@ -68,7 +68,7 @@ PVRSRV_ERROR MTKSetFreqInfo(unsigned int freq, unsigned int tbltype)
     if (freq > GPU_DVFS_F5)
     {
         mt_gpufreq_set_initial(freq, GPU_POWER_VRF18_1_15V);
-        mt65xx_reg_sync_writel((readl(CLK_CFG_8)&0xffcffff)|0x20000, CLK_CFG_8);
+        mt65xx_reg_sync_writel((readl(CLK_CFG_8)&0xffcffff)|0x30000, CLK_CFG_8);
     }
     else
 #endif

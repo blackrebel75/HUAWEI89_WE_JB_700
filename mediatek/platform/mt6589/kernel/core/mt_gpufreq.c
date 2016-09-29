@@ -1696,7 +1696,7 @@ static int __init mt_gpufreq_init(void)
             g_cur_freq = GPU_UNIVPLL1_D2;
             break;
         case 0x7: // 286Mhz
-            g_cur_freq = GPU_MMPLL_D5;
+            g_cur_freq = GPU_MMPLL_D4;
             break;
         case 0x3: // 268Mhz
             g_cur_freq = GPU_SYSPLL_D3;
