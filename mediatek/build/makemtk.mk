@@ -59,7 +59,7 @@ hide         :=  @
 CMD_ARGU2    :=  $(filter-out -j%, $(CMD_ARGU))
 REMAKECMD    :=  make -fmediatek/build/makemtk.mk CMD_ARGU=$(CMD_ARGU) $(CMD_ARGU2) $(MAKE_DEBUG)
 CPUCORES     :=  $(shell cat /proc/cpuinfo | grep processor | wc -l)
-MAKEJOBS     :=  -j4
+MAKEJOBS     :=  -j$(CPUCORES)
 
 # Memory partition auto-gen related variable initilization
 MEM_PARTITION_GENERATOR   := mediatek/build/tools/ptgen/$(MTK_PLATFORM)/ptgen.pl

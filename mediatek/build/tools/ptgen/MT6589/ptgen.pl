@@ -124,7 +124,6 @@ my $CUSTOM_MEMORYDEVICE_H_NAME  = "mediatek/custom/$PROJECT/preloader/inc/custom
 my $PARTITION_DEFINE_H_NAME     = "mediatek/custom/$PROJECT/common/partition_define.h"; # 
 my $PARTITION_DEFINE_C_NAME		= "mediatek/platform/$platform/kernel/drivers/dum-char/partition_define.c";
 my $EMMC_PART_SIZE_LOCATION		= "mediatek/config/$PROJECT/configs/EMMC_partition_size.mk" ; # store the partition size for ext4 buil
-my $RECOVERY_PARTITION_DEFINE_H_NAME     = "bootable/recovery/partition_define.h";
 
 my $PMT_H_NAME          = "mediatek/custom/$PROJECT/common/pmt.h";
 #for autogen uboot preload and kernel partition struct
@@ -220,7 +219,6 @@ $PartitonBook = Spreadsheet::ParseExcel->new()->Parse($PART_TABLE_FILENAME);
 
 &GenHeaderFile () ;
 
-&GenRecoveryHeaderFile () ;
 &GenScatFile () ;
 
 if ($EMMC_SUPPORT eq "yes"){
@@ -2194,98 +2192,4 @@ sub xls_cell_value {
 		print $error_msg;
 		die $error_msg;
 	}
-}
-#****************************************************************************
-# subroutine:  GenRecoveryHeaderFile
-# return:
-#****************************************************************************
-sub GenRecoveryHeaderFile ()
-{
-    my $iter = 0 ;
-    my $temp ;
-	my $t;
-
-	if (-e $RECOVERY_PARTITION_DEFINE_H_NAME)
-	{
-		`chmod 777 $RECOVERY_PARTITION_DEFINE_H_NAME`;
-	}
-    open (RECOVERY_PARTITION_DEFINE_H_NAME, ">$RECOVERY_PARTITION_DEFINE_H_NAME") or &error_handler("Ptgen open RECOVERY_PARTITION_DEFINE_H_NAME fail!\n", __FILE__, __LINE__);
-
-#write header
-    print RECOVERY_PARTITION_DEFINE_H_NAME &copyright_file_header_for_c();
-    print RECOVERY_PARTITION_DEFINE_H_NAME "\n#ifndef __PARTITION_DEFINE_H__\n#define __PARTITION_DEFINE_H__\n\n" ;
-    print RECOVERY_PARTITION_DEFINE_H_NAME "\n\n\n#define KB  (1024)\n#define MB  (1024 * KB)\n#define GB  (1024 * MB)\n\n" ;
-
-
-    for ($iter=0; $iter< $total_rows; $iter++)
-    {
-        if($PARTITION_FIELD[$iter] eq "BMTPOOL")
-        {
-			my $bmtpool=sprintf("%x",$SIZE_FIELD_KB[$iter]/64/$Page_Size);
-			$temp = "#define PART_SIZE_$PARTITION_FIELD[$iter]\t\t\t(0x$bmtpool)\n" ;
-			print RECOVERY_PARTITION_DEFINE_H_NAME $temp ;
-        }else
-        {
-			$temp = "#define PART_SIZE_$PARTITION_FIELD[$iter]\t\t\t($SIZE_FIELD_KB[$iter]*KB)\n" ;
-			print RECOVERY_PARTITION_DEFINE_H_NAME $temp ;
-        }
-
-    }
-
-    print RECOVERY_PARTITION_DEFINE_H_NAME "\n\n#define PART_NUM\t\t\t$total_rows\n\n";
-	print RECOVERY_PARTITION_DEFINE_H_NAME "#define MBR_START_ADDRESS_BYTE\t\t\t($MBR_Start_Address_KB*KB)\n\n";
-	if($EMMC_SUPPORT eq "yes"){
-		print RECOVERY_PARTITION_DEFINE_H_NAME "#define WRITE_SIZE_Byte		512\n";
-	}else{
-		print RECOVERY_PARTITION_DEFINE_H_NAME "#define WRITE_SIZE_Byte		($Page_Size*1024)\n";
-	}
-	my $ExcelStruct = <<"__TEMPLATE";
-typedef enum  {
-	EMMC = 1,
-	NAND = 2,
-} dev_type;
-
-typedef enum {
-	USER = 0,
-	BOOT_1,
-	BOOT_2,
-	RPMB,
-	GP_1,
-	GP_2,
-	GP_3,
-	GP_4,
-} Region;
-
-
-struct excel_info{
-	char * name;
-	unsigned int size;
-	unsigned int start_address;
-	dev_type type ;
-	unsigned int partition_idx;
-	Region region;
-};
-__TEMPLATE
-
-	print RECOVERY_PARTITION_DEFINE_H_NAME $ExcelStruct;
-	print RECOVERY_PARTITION_DEFINE_H_NAME "static struct excel_info PartInfo[PART_NUM]={\n";
-
-	for ($iter=0; $iter<$total_rows; $iter++)
-    {
-		$t = lc($PARTITION_FIELD[$iter]);
-		$temp = "\t\t\t{\"$t\",";
-		$t = ($SIZE_FIELD_KB[$iter])*1024;
-		$temp .= "$t,0x$START_FIELD_Byte_HEX[$iter]";
-
-		if($EMMC_SUPPORT eq "yes"){
-			$temp .= ", EMMC, $PARTITION_IDX_FIELD[$iter],$REGION_FIELD[$iter]";
-		}else{
-			$temp .= ", NAND";
-		}
-		$temp .= "},\n";
-		print RECOVERY_PARTITION_DEFINE_H_NAME $temp;
-	}
-	print RECOVERY_PARTITION_DEFINE_H_NAME " };\n";
-	print RECOVERY_PARTITION_DEFINE_H_NAME "\n\n#endif\n" ;
-    close RECOVERY_PARTITION_DEFINE_H_NAME ;
 }
