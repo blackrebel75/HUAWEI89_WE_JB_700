@@ -482,9 +482,6 @@ static void auxadc_cal_prepare(void)
 	g_o_slope     = ((temp & 0xFC000000) >> 26);
 	g_o_slope_sign= ((temp & 0x00000080) >> 7);    
 
-    //avoid sleeping 10ms when g_adc_cali_en = 0 (most time)
-    if(1 == g_adc_cali_en)
-    {
 		//get y_vbg
 		mt65xx_reg_sync_writel(0x0002, 0xf0007804);//TS_CON1
 		mt65xx_reg_sync_writel(0x0200, 0xf0007808);//TS_CON2
@@ -498,6 +495,9 @@ static void auxadc_cal_prepare(void)
 		{
 			g_o_slope = 0;
 		}
+	if(g_adc_cali_en == 1)
+	{
+		//get y_vbg      
 	}
 	else
 	{

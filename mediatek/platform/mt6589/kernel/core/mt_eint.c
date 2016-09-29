@@ -816,6 +816,8 @@ static irqreturn_t mt_eint_isr(int irq, void *dev_id)
 	    }
 	}
 
+        if(!(readl(PMIC_EINT_STA_BASE)))
+            mt65xx_reg_sync_writel(0x1,PMIC_EINT_EEVT_CLR_BASE);
 	dbgmsg(KERN_DEBUG "EINT Module - %s ISR END\n", __func__);
 	return IRQ_HANDLED;
 }

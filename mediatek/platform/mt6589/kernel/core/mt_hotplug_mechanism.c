@@ -16,7 +16,6 @@
 #include <linux/proc_fs.h>
 #include <asm/uaccess.h>
 #include <mach/hotplug.h>
-#include <mach/sync_write.h>
 
 
 
@@ -55,7 +54,6 @@ static int g_test1 = 0;
 * extern function
 **********************************/
 extern void hp_disable_cpu_hp(int disable);
-extern struct mutex hp_onoff_mutex;
 
 
 
@@ -71,7 +69,6 @@ static void mt_hotplug_mechanism_early_suspend(struct early_suspend *h)
     {
         int i = 0;
         
-        mutex_lock(&hp_onoff_mutex);
         
         hp_disable_cpu_hp(1);
 
@@ -81,7 +78,6 @@ static void mt_hotplug_mechanism_early_suspend(struct early_suspend *h)
                 cpu_down(i);
         }
         
-        mutex_unlock(&hp_onoff_mutex);
     }
 
     g_cur_state = STATE_ENTER_EARLY_SUSPEND;
@@ -126,14 +122,6 @@ static int mt_hotplug_mechanism_read_test0(char *buf, char **start, off_t off, i
     HOTPLUG_INFO("mt_hotplug_mechanism_read_test0, hotplug_cpu_count: %d\n", atomic_read(&hotplug_cpu_count));
     on_each_cpu((smp_call_func_t)dump_stack, NULL, 1);
     
-    mt65xx_reg_sync_writel(8, 0xf0200080);
-    printk(KERN_EMERG "CPU%u, debug event: 0x%08x, debug monitor: 0x%08x\n", 0, *(volatile u32 *)(0xf0200080), *(volatile u32 *)(0xf0200084));
-    mt65xx_reg_sync_writel(9, 0xf0200080);
-    printk(KERN_EMERG "CPU%u, debug event: 0x%08x, debug monitor: 0x%08x\n", 1, *(volatile u32 *)(0xf0200080), *(volatile u32 *)(0xf0200084));
-    mt65xx_reg_sync_writel(10, 0xf0200080);
-    printk(KERN_EMERG "CPU%u, debug event: 0x%08x, debug monitor: 0x%08x\n", 2, *(volatile u32 *)(0xf0200080), *(volatile u32 *)(0xf0200084));
-    mt65xx_reg_sync_writel(11, 0xf0200080);
-    printk(KERN_EMERG "CPU%u, debug event: 0x%08x, debug monitor: 0x%08x\n", 3, *(volatile u32 *)(0xf0200080), *(volatile u32 *)(0xf0200084));
     
     return p - buf;
 }
