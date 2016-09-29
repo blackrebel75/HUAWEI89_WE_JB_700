@@ -1,0 +1,1 @@
+/home/fabio/sources/HUAWEI89_WE_JB_700/mediatek/build/Makefile
