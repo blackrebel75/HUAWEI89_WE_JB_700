@@ -22,6 +22,7 @@ struct excel_info PartInfo[PART_NUM]={
 			{"cust",201326592,0x44780000, EMMC, 6,USER},
 			{"cache",132120576,0x50780000, EMMC, 7,USER},
 			{"usrdata",1073741824,0x58580000, EMMC, 8,USER},
+			{"fat",0,0x98580000, EMMC, 9,USER},
 			{"bmtpool",22020096,0xFFFF00a8, EMMC, 0,USER},
  };
 EXPORT_SYMBOL(PartInfo);
@@ -30,7 +31,7 @@ EXPORT_SYMBOL(PartInfo);
 struct MBR_EBR_struct MBR_EBR_px[MBR_COUNT]={
 	{"mbr", {1, 2, 3, 4, }},
 	{"ebr1", {5, 6, 7, }},
-	{"ebr2", {8, }},
+	{"ebr2", {8, 9, }},
 };
 
 EXPORT_SYMBOL(MBR_EBR_px);

@@ -30,6 +30,7 @@
 #define PART_CUST "CUST" 
 #define PART_CACHE "CACHE" 
 #define PART_USRDATA "USRDATA" 
+#define PART_FAT "FAT" 
 #define PART_BMTPOOL "BMTPOOL" 
 /*preloader re-name*/
 #define PART_SECURE "SECURE" 
@@ -67,10 +68,11 @@
 #define PART_SIZE_CUST			(196608*KB)
 #define PART_SIZE_CACHE			(129024*KB)
 #define PART_SIZE_USRDATA			(1048576*KB)
+#define PART_SIZE_FAT			(0*KB)
 #define PART_SIZE_BMTPOOL			(0xa8)
 
 
-#define PART_NUM			22
+#define PART_NUM			23
 
 
 
