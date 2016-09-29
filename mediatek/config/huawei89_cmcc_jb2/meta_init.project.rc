@@ -45,14 +45,11 @@ on boot
 #
 # Connectivity related services (Begin)
 #
-service 662x_launcher /system/bin/logwrapper /system/bin/6620_launcher -b 4000000 -p /system/etc/firmware/ -d /dev/ttyMT2
+service 662x_launcher /system/bin/6620_launcher -m 1 -b 4000000 -p /system/etc/firmware/ -d /dev/ttyMT2
     user system
     group system
     
 
-service wlanLoader /system/bin/wlan_loader
-    user root
-    group root
     oneshot
 
 #

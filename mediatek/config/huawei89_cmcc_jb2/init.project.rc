@@ -49,12 +49,13 @@ on post-fs-data
 # WiFi
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    chmod 777 /data/misc/wifi/sockets
     mkdir /data/misc/wpa_supplicant 0770 wifi wifi
     chown wifi wifi /data/misc/wifi
 
 #Disable for one Single loader
 # Load WiFi Driver
-#   insmod /system/lib/modules/wlan.ko
+    insmod /system/lib/modules/wlan.ko
 
 # Char device for BT 3.0 HS
     mknod /dev/ampc0 c 151 0
@@ -74,7 +75,7 @@ on boot
 #
 # Connectivity related services (Begin)
 #
-service 662x_launcher /system/bin/logwrapper /system/bin/6620_launcher -b 4000000 -p /system/etc/firmware/ -d /dev/ttyMT2
+service 662x_launcher /system/bin/6620_launcher -m 1 -b 4000000 -p /system/etc/firmware/ -d /dev/ttyMT2
     user system
     group system
     class core
@@ -85,13 +86,16 @@ service stp_dump /system/bin/stp_dump3
     class main
 #   oneshot
 
-service wlanLoader /system/bin/wlan_loader
-    user root
-    group root
-    class main
-    oneshot
 
 #
 # Connectivity related services (End)
 #
 
+#
+# lion DATE20130129  NTZOFR-16 OTA (Begin)
+#
+service GoogleOtaBinder /system/bin/GoogleOtaBinder
+   user root
+#
+# lion DATE20130129  NTZOFR-16 OTA (End)
+#
