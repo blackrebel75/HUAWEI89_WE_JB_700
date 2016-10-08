@@ -500,7 +500,7 @@ static int __init cyttsp4_debug_init(void)
 	return 0;
 
 fail_unregister_devices:
-	for (i--; i <= 0; i--) {
+	for (i--; i >= 0; i--) {
 		cyttsp4_unregister_device(cyttsp4_debug_infos[i].name,
 			cyttsp4_debug_infos[i].core_id);
 		pr_info("%s: Unregistering device access device for core_id: %s\n",

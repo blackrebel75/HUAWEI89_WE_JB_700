@@ -10,7 +10,6 @@
 //*****************************************************************************
 //*****************************************************************************
 //-----------------------------------------------------------------------------
-
 /* Touchscreen Parameters Endianess (Endianess: 0:Little; 1:Big)*/
 static const uint8_t cyttsp4_G700_ofilm_param_endianess = 0;
 
@@ -20,17 +19,17 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0xFC, 0x07,  /* CONFIG_DATA_SIZE */
 	0xFC, 0x07,  /* CONFIG_DATA_MAX_SIZE */
 	0x4C, 0x00, 0x00, 0x00,  /* SDK_CTRL_CFG_SIZE */
-	0x06, 0x00,  /* CONFIG_VER */
-	0x01,  /* PANELID_ENABLE */
-	0x24,  /* IMO_FREQ_MHZ */
+	0x0D, 0x00,  /* CONFIG_VER */
 	0xEC, 0x1D,  /* X_LEN_PHY */
 	0x80, 0x34,  /* Y_LEN_PHY */
+	0x01,  /* PANELID_ENABLE */
+	0x24,  /* IMO_FREQ_MHZ */
+	0x00,  /* TSS_ADC_FRE_SELECTION */
 	0x10,  /* HST_MODE0 */
 	0x00,  /* ACT_DIST0 */
 	0x88,  /* SCAN_TYP0 */
 	0x0C,  /* ACT_INTRVL0 */
 	0x03,  /* ACT_LFT_INTRVL0 */
-	0x00,  /* Reserved21 */
 	0x14, 0x00,  /* LP_INTRVL0 */
 	0xE8, 0x03,  /* TCH_TMOUT0 */
 	0x00,  /* PWR_CFG */
@@ -39,7 +38,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x09,  /* OPMODE_CFG */
 	0xF4, 0x01,  /* HANDSHAKE_TIMEOUT */
 	0x1E,  /* TIMER_CAL_INTERVAL */
-	0x00,  /* Reserved33 */
+	0x01,  /* POST_DELAY */
 	0x00, 0x00,  /* RP2P_MIN */
 	0x88, 0x13,  /* ILEAK_MAX */
 	0x96, 0x00,  /* RFB_P2P */
@@ -58,12 +57,13 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x05,  /* PANEL_ID0 */
 	0x02,  /* PANEL_ID1 */
 	0x10,  /* PANEL_ID2 */
+	0x00, 0x00,  /* IMO_TRIM */
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00,  /* Reserved56 */
+	0x00, 0x00,  /* Reserved58 */
 	0x18, 0x00, 0x00, 0x00,  /* GRIP_CFG_SIZE */
 	0x00, 0x00,  /* GRIP_XEDG_A */
 	0x00, 0x00,  /* GRIP_XEDG_B */
@@ -85,7 +85,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x0A, 0x00, 0x00, 0x00,  /* SELF_Z_THRSH */
 	0x01, 0x00, 0x00, 0x00,  /* SELF_Z_MODE */
 	0x01, 0x00, 0x00, 0x00,  /* SMART_SCAN_ENABLE */
-	0x01, 0x00, 0x00, 0x00,  /* T_COMP_ENABLE */
+	0x00, 0x00, 0x00, 0x00,  /* T_COMP_ENABLE */
 	0xD0, 0x07, 0x00, 0x00,  /* T_COMP_INTERVAL */
 	0xE8, 0x03, 0x00, 0x00,  /* T_COMP_RECAL_MUTUAL_SENSOR_LIMIT */
 	0x64, 0x00, 0x00, 0x00,  /* T_COMP_RECAL_MUTUAL_HIGH */
@@ -97,16 +97,17 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x00, 0x00, 0x00, 0x00,  /* AFH_ENABLE */
 	0x08, 0x00, 0x00, 0x00,  /* AFH_LISTENING_SCAN_COUNT */
 	0x06, 0x00, 0x00, 0x00,  /* AFH_LISTEN_SCAN_CYCLE_REPEATS */
-	0x32, 0x00, 0x00, 0x00,  /* CA_BLOCK_NOISE_THRESHOLD */
-	0x03, 0x00, 0x00, 0x00,  /* CA_BLOCK_NOISE_HYSTERESIS */
+	0x64, 0x00, 0x00, 0x00,  /* CA_BLOCK_NOISE_THRESHOLD */
+	0x05, 0x00, 0x00, 0x00,  /* CA_BLOCK_NOISE_HYSTERESIS */
 	0xD0, 0x07, 0x00, 0x00,  /* CA_DEFAULT_REVERT_TIME */
 	0x01, 0x00,  /* CA_SMART_H2O_REJECT */
-	0x00, 0x00,  /* CA_HOST_CONTROLLED_CHARGER */
+	0x00,  /* CA_HOST_CONTROLLED_CHARGER */
+	0x00,  /* Reserved203 */
 	0xA0, 0x00,  /* T_COMP_BUTTON_MUTUAL_HIGH */
 	0xC4, 0xFF,  /* T_COMP_BUTTON_MUTUAL_LOW */
 	0xA0, 0x00,  /* T_COMP_BUTTON_SELF_HIGH */
 	0xC4, 0xFF,  /* T_COMP_BUTTON_SELF_LOW */
-	0x07, 0x00, 0x00, 0x00,  /* CA_NUM_SUB_CONV_BASE_SELF */
+	0x0A, 0x00, 0x00, 0x00,  /* CA_NUM_SUB_CONV_BASE_SELF */
 	0x0A, 0x00, 0x00, 0x00,  /* CA_ALT_NUM_SUB_CONV_SELF */
 	0xC8, 0x00,  /* EASYWAKEUP_SELF_TX_THR */
 	0xC8, 0x00,  /* EASYWAKEUP_SELF_RX_THR */
@@ -148,6 +149,8 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x0A,  /* ACT_DIST_LIFTOFF */
 	0x05,  /* ACT_DIST_COUNTER */
 	0x0A,  /* ACT_DIST_Z_THRESHOLD */
+	0x01,  /* AFH_SELF_ENABLE */
+	0x01,  /* SELF_TX_BASELINE_CA */
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
@@ -155,20 +158,19 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 
-	0x00,  /* Reserved271 */
-	0x07,  /* CA_ALT_NUM_SUB_CONV_MUTUAL */
+	0x00, 0x00, 0x00,  /* Reserved273 */
+	0x0E,  /* CA_ALT_NUM_SUB_CONV_MUTUAL */
 	0x02,  /* CA_ALT_ACQUISITION_FLAGS */
-	0x3C,  /* AFH_ALT_TX_PERIOD1 */
+	0x69,  /* AFH_ALT_TX_PERIOD1 */
 	0x00,  /* Reserved307 */
 	0xE8, 0x03,  /* AFH_ALT_TX_PERIOD1_MUTUAL_SCALE_FACTOR */
 	0x0C,  /* AFH_ALT_TX_PERIOD1_MUTUAL_TX_VOLTAGE */
-	0x03,  /* AFH_ALT_TX_PULSES1 */
-	0x3C,  /* AFH_ALT_TX_PERIOD2 */
+	0x02,  /* AFH_ALT_TX_PULSES1 */
+	0x8C,  /* AFH_ALT_TX_PERIOD2 */
 	0x00,  /* Reserved313 */
 	0xE8, 0x03,  /* AFH_ALT_TX_PERIOD2_MUTUAL_SCALE_FACTOR */
 	0x0C,  /* AFH_ALT_TX_PERIOD2_MUTUAL_TX_VOLTAGE */
-	0x03,  /* AFH_ALT_TX_PULSES2 */
+	0x02,  /* AFH_ALT_TX_PULSES2 */
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
@@ -176,22 +178,24 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x00, 0x00,  /* Reserved318 */
 	0x1C, 0x00, 0x00, 0x00,  /* XY_FILT_CFG_SIZE */
 	0xF0,  /* XY_FILTER_MASK */
-	0x20,  /* XY_FILT_IIR_SLOW_COEFF */
+	0x08,  /* XY_FILT_IIR_SLOW_COEFF */
 	0x20,  /* XY_FILT_IIR_FAST_COEFF */
 	0x01,  /* XY_FILT_Z_IIR_COEFF */
-	0x32, 0x00,  /* XY_FILT_XY_SLOW_THR */
+	0x1E, 0x00,  /* XY_FILT_XY_SLOW_THR */
 	0xFF, 0x00,  /* XY_FILT_XY_FAST_THR */
 	0xF0,  /* XY_FILTER_MASK_CA */
-	0x10,  /* XY_FILT_IIR_SLOW_COEFF_CA */
-	0x10,  /* XY_FILT_IIR_FAST_COEFF_CA */
+	0x08,  /* XY_FILT_IIR_SLOW_COEFF_CA */
+	0x20,  /* XY_FILT_IIR_FAST_COEFF_CA */
 	0x02,  /* XY_FILT_Z_IIR_COEFF_CA */
 	0x32, 0x00,  /* XY_FILT_XY_SLOW_THR_CA */
 	0xFF, 0x00,  /* XY_FILT_XY_FAST_THR_CA */
 	0x01,  /* XY_FILT_ADAPTIVE_IIR_FILTER */
 	0x0C,  /* XY_FILT_ADAPTIVE_IIR_FILTER_DISTANCE */
+	0x01,  /* XY_FILT_TAP_FILTER */
+	0x3C,  /* XY_FILT_TAP_FILTER_DISTANCE_PER_FRAME */
+	0x28,  /* XY_FILT_TAP_FILTER_TIMEOUT */
 	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00,  /* Reserved358 */
+	0x00, 0x00, 0x00,  /* Reserved361 */
 	0x08, 0x00, 0x00, 0x00,  /* FINGER_ID_CFG_SIZE */
 	0x00, 0x00, 0x00, 0x00,  /* FINGER_ID_ACT_DIST2 */
 	0x50, 0xC3, 0x00, 0x00,  /* FINGER_ID_MIN_TAPPING_DISTANCE2 */
@@ -199,12 +203,12 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x00, 0x00, 0x00,  /* Reserved381 */
 	0x20,  /* ID_COORDS_CFG_SIZE */
 	0x02,  /* LRG_OBJ_CFG */
-	0x1E,  /* MAX_FAT_FINGER_SIZE */
+	0x28,  /* MAX_FAT_FINGER_SIZE */
 	0x07,  /* MIN_FAT_FINGER_SIZE */
 	0x96,  /* MAX_FAT_FINGER_SIZE_GLOVE */
 	0x96,  /* MIN_FAT_FINGER_SIZE_GLOVE */
 	0xDC, 0x00,  /* FINGER_THRESH_MUTUAL */
-	0x96, 0x00,  /* FINGER_THRESH_SELF */
+	0x4B, 0x00,  /* FINGER_THRESH_SELF */
 	0x0F,  /* INNER_EDGE_GAIN */
 	0x0C,  /* OUTER_EDGE_GAIN */
 	0xD0, 0x02, 0x00, 0x00,  /* X_RESOLUTION */
@@ -214,29 +218,28 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x01,  /* RX_LINE_FILTER */
 	0x00,  /* MULTI_TOUCH_DEBOUNCE */
 	0x2C, 0x01,  /* CA_FINGER_THRESHOLD_MUTUAL */
-	0x64, 0x00,  /* FINGER_THRESH_MUTUAL_HYST */
+	0x96, 0x00,  /* FINGER_THRESH_MUTUAL_HYST */
 	0x02,  /* RX_LINE_FILTER_DEBOUNCE */
 	0x58,  /* RX_LINE_FILTER_THRESHOLD */
-	0x00,  /* CLIPPING_X_LOW */
-	0x00,  /* CLIPPING_X_HIGH */
-	0x00,  /* CLIPPING_Y_LOW */
+	0x0F,  /* CLIPPING_X_LOW */
+	0x0F,  /* CLIPPING_X_HIGH */
+	0x0A,  /* CLIPPING_Y_LOW */
 	0x00,  /* CLIPPING_Y_HIGH */
 	0x40,  /* VALID_SIGNAL_MULTIPLIER */
 	0x1E,  /* PEAK_PATTERN_MULTIPLIER */
 	0xC8, 0x32,  /* MAX_MF_Z9 */
-	0xB8, 0x0B,  /* MIN_FF_Z9 */
-	0x04,  /* X_INNER_EDGE_GAIN */
+	0xA0, 0x0F,  /* MIN_FF_Z9 */
+	0x02,  /* X_INNER_EDGE_GAIN */
 	0x01,  /* X_OUTER_EDGE_GAIN */
-	0x04,  /* Y_INNER_EDGE_GAIN */
+	0x02,  /* Y_INNER_EDGE_GAIN */
 	0x01,  /* Y_OUTER_EDGE_GAIN */
-	0x0E,  /* X_EDGE_COMPENSATION_GAIN */
-	0x0E,  /* Y_EDGE_COMPENSATION_GAIN */
-	0x1E, 0x00,  /* GLOVE_THRESH_SELF */
-	0x28, 0x00,  /* GLOVE_THRESH_MUTUAL */
+	0x0A, 0x00,  /* SMALLSIG_FORBID_AFTER_TOUCH_LIFT_OFF */
+	0x14, 0x00,  /* GLOVE_THRESH_SELF */
+	0x1E, 0x00,  /* GLOVE_THRESH_MUTUAL */
 	0x02,  /* GLOVE_DEBOUNCE */
-	0xA0,  /* GLOVE_FORBID_AFTER_TOUCH_LIFT */
+	0x00,  /* Reserved441 */
 	0x58, 0x1B,  /* FAT_FINGER_EDGE_MAX_MF_Z_SUM */
-	0x70, 0x17,  /* INIT_FINGER_SIZE */
+	0xE8, 0x03,  /* INIT_FINGER_SIZE */
 	0x2C, 0x01,  /* ESD_NEGATIVE_THRESHOLD */
 	0x05, 0x00,  /* ESD_NEGATIVE_THRESHOLD_HYST */
 	0x02,  /* ESD_SHORT_DEBOUNCE */
@@ -247,23 +250,25 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x03,  /* WET_FINGER_NEG_COUNT */
 	0x0A,  /* LO_LIFTOFF_DEBOUNCE */
 	0x00,  /* LO_REPORT_TOUCH  */
-	0x78, 0x00,  /* THINGLOVE_THRESH_SELF */
-	0xC8, 0x00,  /* THINGLOVE_THRESH_MUTUAL */
+	0x3C, 0x00,  /* THINGLOVE_THRESH_SELF */
+	0x96, 0x00,  /* THINGLOVE_THRESH_MUTUAL */
 	0x64, 0x00,  /* THINGLOVE_MODE_HYST_MUTUAL */
-	0x14, 0x05,  /* SD_ENTER_PEAK_THOLD */
-	0xA4, 0x06,  /* SD_EXIT_PEAK_THOLD */
+	0xF4, 0x01,  /* SD_ENTER_PEAK_THOLD */
+	0x84, 0x03,  /* SD_EXIT_PEAK_THOLD */
 	0x09,  /* SD_SIZE_THOLD */
 	0x0A,  /* WET_FINGER_MT_DEBOUNCE */
-	0x20, 0x03,  /* WATER_RAW_DETECT_THOLD */
+	0x58, 0x02,  /* WATER_RAW_DETECT_THOLD */
 	0xDC, 0x05,  /* WATER_RAW_HIGH_LEVEL_THOLD */
-	0x20, 0x03,  /* WATER_DIFF_DETECT_THOLD */
-	0xFA, 0x00,  /* WATER_RAW_CALC_THOLD */
-	0x14, 0x00,  /* WATER_DIFF_CALC_THOLD */
+	0x58, 0x02,  /* WATER_DIFF_DETECT_THOLD */
+	0x64, 0x00,  /* WATER_RAW_CALC_THOLD */
+	0x1E, 0x00,  /* WATER_DIFF_CALC_THOLD */
 	0x05,  /* CALC_THRESHOLD */
-	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 
-	0x00,  /* Reserved483 */
+	0x02,  /* FINGERMODES_MODE_SWITCH_DEBOUNCE */
+	0x28, 0x00,  /* FINGERMODES_FIRSTTOUCH_THOLD */
+	0x64, 0x00,  /* FINGERMODES_FIRSTTOUCH_THOLD_SELF */
+	0xFA, 0x00,  /* FINGERMODES_GLOVE_MAXPEAK */
+	0xC8, 0x00,  /* FINGREMODES_MIN_FINGER_5X5SUM */
+	0x00, 0x00, 0x00, 0x00,  /* Reserved492 */
 	0x0B, 0x00, 0x00, 0x00,  /* BTN_CFG_SIZE */
 	0x00, 0x00,  /* BTN_THRSH_MUT_0 */
 	0x00, 0x00,  /* BTN_THRSH_MUT_1 */
@@ -284,39 +289,40 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x0A,  /* BTN_GLOVE_FORBID_AFTER_TOUCH_LIFT */
 	0x08, 0x00,  /* BL_THR_BTN_MUT_GLOVE */
 	0x05, 0x00,  /* BL_THR_BTN_SELF_GLOVE */
-	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00,  /* Reserved532 */
+	0x01,  /* SMART_BTN_ENABLED */
+	0x05,  /* SMART_BTN_TOUCHDOWN_DEBOUNCE */
+	0x0A,  /* SMART_BTN_DISABLE_DEBOUNCE */
+	0x03,  /* SMART_BTN_RELEASE_DEBOUNCE */
+	0x0A,  /* SMART_BTN_BOTTOM_DISTANCE_THRESHOLD */
+	0xB8, 0x0B,  /* SMART_BTN_Z9_THRESHOLD */
+	0x0B, 0x00, 0x00, 0x00, 
+	0x00,  /* Reserved539 */
 	0x1A, 0x00, 0x00, 0x00,  /* RAW_PROC_CFG_SIZE */
 	0x77, 0x00,  /* RAW_FILTER_MASK */
 	0x04,  /* RAW_FILT_IIR_COEFF_MUTUAL */
-	0x0A,  /* RAW_FILT_IIR_THRESHOLD_MUTUAL */
 	0x04,  /* RAW_FILT_IIR_COEFF_SELF */
-	0x0A,  /* RAW_FILT_IIR_THRESHOLD_SELF */
-	0x08,  /* RAW_FILT_IIR_COEFF_BALANCED */
-	0x14,  /* RAW_FILT_IIR_THRESHOLD_BALANCED */
 	0x08,  /* RAW_FILT_IIR_COEFF_BUTTONS */
-	0x0A,  /* RAW_FILT_IIR_THRESHOLD_BUTTONS */
-	0x00, 0x00,  /* Reserved558 */
+	0x00,  /* Reserved553 */
+	0x0A, 0x00,  /* RAW_FILT_IIR_THRESHOLD_MUTUAL */
+	0x0A, 0x00,  /* RAW_FILT_IIR_THRESHOLD_SELF */
+	0x0A, 0x00,  /* RAW_FILT_IIR_THRESHOLD_BUTTONS */
 	0x77, 0x77,  /* RAW_FILTER_MASK_CA */
 	0x02,  /* RAW_FILT_IIR_COEFF_MUTUAL_CA */
-	0x50,  /* RAW_FILT_IIR_THRESHOLD_MUTUAL_CA */
 	0x02,  /* RAW_FILT_IIR_COEFF_SELF_CA */
-	0x50,  /* RAW_FILT_IIR_THRESHOLD_SELF_CA */
-	0x01,  /* RAW_FILT_IIR_COEFF_BALANCED_CA */
-	0x14,  /* RAW_FILT_IIR_THRESHOLD_BALANCED_CA */
-	0x01,  /* RAW_FILT_IIR_COEFF_BUTTONS_CA */
-	0x14,  /* RAW_FILT_IIR_THRESHOLD_BUTTONS_CA */
-	0x00, 0x00,  /* Reserved570 */
+	0x02,  /* RAW_FILT_IIR_COEFF_BUTTONS_CA */
+	0x00,  /* Reserved565 */
+	0x32, 0x00,  /* RAW_FILT_IIR_THRESHOLD_MUTUAL_CA */
+	0x32, 0x00,  /* RAW_FILT_IIR_THRESHOLD_SELF_CA */
+	0x32, 0x00,  /* RAW_FILT_IIR_THRESHOLD_BUTTONS_CA */
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00,  /* Reserved572 */
-	0x02,  /* BL_DELAY_MUT */
+	0x05,  /* BL_DELAY_MUT */
 	0x0A,  /* BL_DELAY_SELF */
 	0x14,  /* BL_DELAY_BAL */
 	0x03,  /* BL_DELAY_BTN */
 	0x96, 0x00,  /* BL_THR_MUT */
-	0x64, 0x00,  /* BL_THR_SELF */
+	0x4B, 0x00,  /* BL_THR_SELF */
 	0x0F, 0x00,  /* BL_THR_MUT_GLOVE */
 	0x0F, 0x00,  /* BL_THR_SELF_GLOVE */
 	0x14, 0x00,  /* BL_MAX_INTRVL_GLOVE_SPECIAL */
@@ -331,13 +337,13 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x50,  /* BL_FILT_BAL */
 	0x50,  /* BL_FILT_BTN_MUT */
 	0x50,  /* BL_FILT_BTN_SELF */
-	0xFA,  /* CMF_THR_MUT */
-	0x96,  /* CMF_THR_SELF */
+	0x32,  /* CMF_THR_MUT */
+	0x1E,  /* CMF_THR_SELF */
 	0x0C,  /* CMF_THR_BAL */
 	0x0C,  /* CMF_THR_BTN_MUT */
 	0x0C,  /* CMF_THR_BTN_SELF */
 	0x28, 0x00,  /* PROX_IIR_THRESHOLD */
-	0x02,  /* PROX_IIR_COEF_SHIT */
+	0x02,  /* PROX_IIR_COEF_SHIFT */
 	0x03,  /* CMF_DELTA_RESET_COUNTER */
 	0x01,  /* BL_MUT_RESET_AXIS */
 	0x00, 0x00, 0x00, 0x00, 
@@ -356,10 +362,12 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x04,  /* XY_FILT_Z_IIR_COEFF_STYLUS */
 	0x05, 0x00,  /* XY_FILT_XY_SLOW_THR_STYLUS */
 	0x64, 0x00,  /* XY_FILT_XY_FAST_THR_STYLUS */
-	0x0C,  /* CMF_THR_MUT_STYLUS */
-	0x0C,  /* CMF_THR_SELF_STYLUS */
 	0x14, 0x00,  /* FINGER_THRESH_MUTUAL_HYST_STYLUS */
-	0x0A,  /* STYLUS_FORBID_AFTER_TOUCH_LIFT */
+	0x01,  /* STYLUS_PALM_REJECTION_ENABLE */
+	0x03,  /* STYLUS_TIP_SEARCH_RANGE */
+	0x7E, 0x03,  /* STYLUS_FILTERCONFIG_MASK */
+	0x78, 0x00,  /* STYLUS_PALM_TIMEOUT */
+	0x0A,  /* STYLUS_MODE_EXIT_DELAY */
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
@@ -368,8 +376,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00,  /* Reserved649 */
+	0x00, 0x00, 0x00,  /* Reserved653 */
 	0xA8, 0x01, 0x00, 0x00,  /* CDC_CFG_SIZE */
 	0x05, 0x04, 0xFF, 0x81,  /* TSS_CONTROL_MUT */
 	0x02, 0x06, 0x00, 0x00,  /* TSS_LENGTH_MUT */
@@ -473,25 +480,25 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x64, 0x00, 0x00, 0x00,  /* SCALE_BUTTON */
 	0x00, 0x00, 0x00, 0x00,  /* LX_MODE */
 	0x50, 0x00, 0x00, 0x00,  /* LX_SCALE */
-	0x01, 0x00, 0x00, 0x00,  /* MEDIAN_EN */
+	0x01, 0x00, 0x00, 0x00,  /* ABSOLUTE_CR_CORRECTION */
 	0x01, 0x00, 0x00, 0x00,  /* SCANNING_MODE_MUTUAL */
 	0x02, 0x00, 0x00, 0x00,  /* SCANNING_MODE_BUTTON */
-	0x19, 0x00,  /* DETECT_CHARGER_THRESHOLD */
+	0x0C, 0x00,  /* DETECT_CHARGER_THRESHOLD */
 	0x00,  /* CA_LX_SCAN_MODE */
 	0x00,  /* SUB_SLOT_SCAN */
 	0x6E,  /* NOISE_METRIC1_THRESHOLD */
-	0x56,  /* NOISE_METRIC2_THRESHOLD */
+	0x37,  /* NOISE_METRIC2_THRESHOLD */
 	0x32,  /* NOISE_METRIC3_THRESHOLD */
 	0x01,  /* AFH_DYNAMIC_THRSH_ENABLE */
 	0x04,  /* ADC_CONFIG */
 	0x00,  /* Reserved1121 */
-	0x00,  /* TSS_LDO_PROG */
+	0x04,  /* TSS_LDO_PROG */
 	0x00,  /* TX_PERIOD_DUMMY_SCAN */
 	0x00,  /* SINGLE_ENDED_LISTEN_SCAN */
 	0x01,  /* SPREAD_MTX */
 	0xB8, 0x0B,  /* PROX_SCALE */
 	0x40,  /* PROX_SUB_CONV */
-	0x04,  /* SUBCONV_FILTER */
+	0x04,  /* WINDOWING_FILTER */
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
@@ -513,7 +520,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x01, 0x00, 0x00, 0x00,  /* GAIN_BTN_MUTUAL */
 	0x03, 0x00, 0x00, 0x00,  /* GAIN_BTN_SELF */
 	0x01, 0x00,  /* RECAL_ENABLE */
-	0xE8, 0x03,  /* RECAL_MUTUAL_HIGH */
+	0x00, 0x00,  /* RECAL_MUTUAL_HIGH */
 	0x54, 0xF2,  /* RECAL_MUTUAL_LOW */
 	0x20, 0x03,  /* RECAL_MUTUAL_DELTA */
 	0x10, 0x27,  /* RECAL_DELAY */
@@ -727,7 +734,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_regs[] = {
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00,  /* Reserved1998 */
-	0x5F, 0xEE,  /* CONFIG_CRC */
+	0xF9, 0xBC,  /* CONFIG_CRC */
 };
 
 /* Touchscreen Parameters Field Sizes (Writable: 0:Readonly; 1:Writable) */
@@ -737,16 +744,16 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	2, /* CONFIG_DATA_MAX_SIZE */
 	4, /* SDK_CTRL_CFG_SIZE */
 	2, /* CONFIG_VER */
-	1, /* PANELID_ENABLE */
-	1, /* IMO_FREQ_MHZ */
 	2, /* X_LEN_PHY */
 	2, /* Y_LEN_PHY */
+	1, /* PANELID_ENABLE */
+	1, /* IMO_FREQ_MHZ */
+	1, /* TSS_ADC_FRE_SELECTION */
 	1, /* HST_MODE0 */
 	1, /* ACT_DIST0 */
 	1, /* SCAN_TYP0 */
 	1, /* ACT_INTRVL0 */
 	1, /* ACT_LFT_INTRVL0 */
-	1, /* Reserved21 */
 	2, /* LP_INTRVL0 */
 	2, /* TCH_TMOUT0 */
 	1, /* PWR_CFG */
@@ -755,7 +762,7 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	1, /* OPMODE_CFG */
 	2, /* HANDSHAKE_TIMEOUT */
 	1, /* TIMER_CAL_INTERVAL */
-	1, /* Reserved33 */
+	1, /* POST_DELAY */
 	2, /* RP2P_MIN */
 	2, /* ILEAK_MAX */
 	2, /* RFB_P2P */
@@ -774,7 +781,8 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	1, /* PANEL_ID0 */
 	1, /* PANEL_ID1 */
 	1, /* PANEL_ID2 */
-	24, /* Reserved56 */
+	2, /* IMO_TRIM */
+	22, /* Reserved58 */
 	4, /* GRIP_CFG_SIZE */
 	2, /* GRIP_XEDG_A */
 	2, /* GRIP_XEDG_B */
@@ -810,7 +818,8 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	4, /* CA_BLOCK_NOISE_HYSTERESIS */
 	4, /* CA_DEFAULT_REVERT_TIME */
 	2, /* CA_SMART_H2O_REJECT */
-	2, /* CA_HOST_CONTROLLED_CHARGER */
+	1, /* CA_HOST_CONTROLLED_CHARGER */
+	1, /* Reserved203 */
 	2, /* T_COMP_BUTTON_MUTUAL_HIGH */
 	2, /* T_COMP_BUTTON_MUTUAL_LOW */
 	2, /* T_COMP_BUTTON_SELF_HIGH */
@@ -857,7 +866,9 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	1, /* ACT_DIST_LIFTOFF */
 	1, /* ACT_DIST_COUNTER */
 	1, /* ACT_DIST_Z_THRESHOLD */
-	33, /* Reserved271 */
+	1, /* AFH_SELF_ENABLE */
+	1, /* SELF_TX_BASELINE_CA */
+	31, /* Reserved273 */
 	1, /* CA_ALT_NUM_SUB_CONV_MUTUAL */
 	1, /* CA_ALT_ACQUISITION_FLAGS */
 	1, /* AFH_ALT_TX_PERIOD1 */
@@ -886,7 +897,10 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	2, /* XY_FILT_XY_FAST_THR_CA */
 	1, /* XY_FILT_ADAPTIVE_IIR_FILTER */
 	1, /* XY_FILT_ADAPTIVE_IIR_FILTER_DISTANCE */
-	10, /* Reserved358 */
+	1, /* XY_FILT_TAP_FILTER */
+	1, /* XY_FILT_TAP_FILTER_DISTANCE_PER_FRAME */
+	1, /* XY_FILT_TAP_FILTER_TIMEOUT */
+	7, /* Reserved361 */
 	4, /* FINGER_ID_CFG_SIZE */
 	4, /* FINGER_ID_ACT_DIST2 */
 	4, /* FINGER_ID_MIN_TAPPING_DISTANCE2 */
@@ -924,12 +938,11 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	1, /* X_OUTER_EDGE_GAIN */
 	1, /* Y_INNER_EDGE_GAIN */
 	1, /* Y_OUTER_EDGE_GAIN */
-	1, /* X_EDGE_COMPENSATION_GAIN */
-	1, /* Y_EDGE_COMPENSATION_GAIN */
+	2, /* SMALLSIG_FORBID_AFTER_TOUCH_LIFT_OFF */
 	2, /* GLOVE_THRESH_SELF */
 	2, /* GLOVE_THRESH_MUTUAL */
 	1, /* GLOVE_DEBOUNCE */
-	1, /* GLOVE_FORBID_AFTER_TOUCH_LIFT */
+	1, /* Reserved441 */
 	2, /* FAT_FINGER_EDGE_MAX_MF_Z_SUM */
 	2, /* INIT_FINGER_SIZE */
 	2, /* ESD_NEGATIVE_THRESHOLD */
@@ -955,7 +968,12 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	2, /* WATER_RAW_CALC_THOLD */
 	2, /* WATER_DIFF_CALC_THOLD */
 	1, /* CALC_THRESHOLD */
-	13, /* Reserved483 */
+	1, /* FINGERMODES_MODE_SWITCH_DEBOUNCE */
+	2, /* FINGERMODES_FIRSTTOUCH_THOLD */
+	2, /* FINGERMODES_FIRSTTOUCH_THOLD_SELF */
+	2, /* FINGERMODES_GLOVE_MAXPEAK */
+	2, /* FINGREMODES_MIN_FINGER_5X5SUM */
+	4, /* Reserved492 */
 	4, /* BTN_CFG_SIZE */
 	2, /* BTN_THRSH_MUT_0 */
 	2, /* BTN_THRSH_MUT_1 */
@@ -976,28 +994,30 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	1, /* BTN_GLOVE_FORBID_AFTER_TOUCH_LIFT */
 	2, /* BL_THR_BTN_MUT_GLOVE */
 	2, /* BL_THR_BTN_SELF_GLOVE */
-	12, /* Reserved532 */
+	1, /* SMART_BTN_ENABLED */
+	1, /* SMART_BTN_TOUCHDOWN_DEBOUNCE */
+	1, /* SMART_BTN_DISABLE_DEBOUNCE */
+	1, /* SMART_BTN_RELEASE_DEBOUNCE */
+	1, /* SMART_BTN_BOTTOM_DISTANCE_THRESHOLD */
+	2, /* SMART_BTN_Z9_THRESHOLD */
+	5, /* Reserved539 */
 	4, /* RAW_PROC_CFG_SIZE */
 	2, /* RAW_FILTER_MASK */
 	1, /* RAW_FILT_IIR_COEFF_MUTUAL */
-	1, /* RAW_FILT_IIR_THRESHOLD_MUTUAL */
 	1, /* RAW_FILT_IIR_COEFF_SELF */
-	1, /* RAW_FILT_IIR_THRESHOLD_SELF */
-	1, /* RAW_FILT_IIR_COEFF_BALANCED */
-	1, /* RAW_FILT_IIR_THRESHOLD_BALANCED */
 	1, /* RAW_FILT_IIR_COEFF_BUTTONS */
-	1, /* RAW_FILT_IIR_THRESHOLD_BUTTONS */
-	2, /* Reserved558 */
+	1, /* Reserved553 */
+	2, /* RAW_FILT_IIR_THRESHOLD_MUTUAL */
+	2, /* RAW_FILT_IIR_THRESHOLD_SELF */
+	2, /* RAW_FILT_IIR_THRESHOLD_BUTTONS */
 	2, /* RAW_FILTER_MASK_CA */
 	1, /* RAW_FILT_IIR_COEFF_MUTUAL_CA */
-	1, /* RAW_FILT_IIR_THRESHOLD_MUTUAL_CA */
 	1, /* RAW_FILT_IIR_COEFF_SELF_CA */
-	1, /* RAW_FILT_IIR_THRESHOLD_SELF_CA */
-	1, /* RAW_FILT_IIR_COEFF_BALANCED_CA */
-	1, /* RAW_FILT_IIR_THRESHOLD_BALANCED_CA */
 	1, /* RAW_FILT_IIR_COEFF_BUTTONS_CA */
-	1, /* RAW_FILT_IIR_THRESHOLD_BUTTONS_CA */
-	2, /* Reserved570 */
+	1, /* Reserved565 */
+	2, /* RAW_FILT_IIR_THRESHOLD_MUTUAL_CA */
+	2, /* RAW_FILT_IIR_THRESHOLD_SELF_CA */
+	2, /* RAW_FILT_IIR_THRESHOLD_BUTTONS_CA */
 	12, /* Reserved572 */
 	1, /* BL_DELAY_MUT */
 	1, /* BL_DELAY_SELF */
@@ -1025,7 +1045,7 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	1, /* CMF_THR_BTN_MUT */
 	1, /* CMF_THR_BTN_SELF */
 	2, /* PROX_IIR_THRESHOLD */
-	1, /* PROX_IIR_COEF_SHIT */
+	1, /* PROX_IIR_COEF_SHIFT */
 	1, /* CMF_DELTA_RESET_COUNTER */
 	1, /* BL_MUT_RESET_AXIS */
 	5, /* Reserved619 */
@@ -1043,11 +1063,13 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	1, /* XY_FILT_Z_IIR_COEFF_STYLUS */
 	2, /* XY_FILT_XY_SLOW_THR_STYLUS */
 	2, /* XY_FILT_XY_FAST_THR_STYLUS */
-	1, /* CMF_THR_MUT_STYLUS */
-	1, /* CMF_THR_SELF_STYLUS */
 	2, /* FINGER_THRESH_MUTUAL_HYST_STYLUS */
-	1, /* STYLUS_FORBID_AFTER_TOUCH_LIFT */
-	39, /* Reserved649 */
+	1, /* STYLUS_PALM_REJECTION_ENABLE */
+	1, /* STYLUS_TIP_SEARCH_RANGE */
+	2, /* STYLUS_FILTERCONFIG_MASK */
+	2, /* STYLUS_PALM_TIMEOUT */
+	1, /* STYLUS_MODE_EXIT_DELAY */
+	35, /* Reserved653 */
 	4, /* CDC_CFG_SIZE */
 	4, /* TSS_CONTROL_MUT */
 	4, /* TSS_LENGTH_MUT */
@@ -1151,7 +1173,7 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	4, /* SCALE_BUTTON */
 	4, /* LX_MODE */
 	4, /* LX_SCALE */
-	4, /* MEDIAN_EN */
+	4, /* ABSOLUTE_CR_CORRECTION */
 	4, /* SCANNING_MODE_MUTUAL */
 	4, /* SCANNING_MODE_BUTTON */
 	2, /* DETECT_CHARGER_THRESHOLD */
@@ -1169,7 +1191,7 @@ static const uint16_t cyttsp4_G700_ofilm_param_size[] = {
 	1, /* SPREAD_MTX */
 	2, /* PROX_SCALE */
 	1, /* PROX_SUB_CONV */
-	1, /* SUBCONV_FILTER */
+	1, /* WINDOWING_FILTER */
 	22, /* Reserved1130 */
 	4, /* CALIBRATION_PARAM_SIZE */
 	4, /* GLOBAL_IDAC_LSB_MUTUAL */
@@ -1212,16 +1234,16 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE6, 0x02, /* CONFIG_DATA_MAX_SIZE */
 	0xE6, 0x04, /* SDK_CTRL_CFG_SIZE */
 	0xE6, 0x08, /* CONFIG_VER */
-	0xE6, 0x0A, /* PANELID_ENABLE */
-	0xE6, 0x0B, /* IMO_FREQ_MHZ */
-	0xE6, 0x0C, /* X_LEN_PHY */
-	0xE6, 0x0E, /* Y_LEN_PHY */
-	0xE6, 0x10, /* HST_MODE0 */
-	0xE6, 0x11, /* ACT_DIST0 */
-	0xE6, 0x12, /* SCAN_TYP0 */
-	0xE6, 0x13, /* ACT_INTRVL0 */
-	0xE6, 0x14, /* ACT_LFT_INTRVL0 */
-	0xE6, 0x15, /* Reserved21 */
+	0xE6, 0x0A, /* X_LEN_PHY */
+	0xE6, 0x0C, /* Y_LEN_PHY */
+	0xE6, 0x0E, /* PANELID_ENABLE */
+	0xE6, 0x0F, /* IMO_FREQ_MHZ */
+	0xE6, 0x10, /* TSS_ADC_FRE_SELECTION */
+	0xE6, 0x11, /* HST_MODE0 */
+	0xE6, 0x12, /* ACT_DIST0 */
+	0xE6, 0x13, /* SCAN_TYP0 */
+	0xE6, 0x14, /* ACT_INTRVL0 */
+	0xE6, 0x15, /* ACT_LFT_INTRVL0 */
 	0xE6, 0x16, /* LP_INTRVL0 */
 	0xE6, 0x18, /* TCH_TMOUT0 */
 	0xE6, 0x1A, /* PWR_CFG */
@@ -1230,7 +1252,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE6, 0x1D, /* OPMODE_CFG */
 	0xE6, 0x1E, /* HANDSHAKE_TIMEOUT */
 	0xE6, 0x20, /* TIMER_CAL_INTERVAL */
-	0xE6, 0x21, /* Reserved33 */
+	0xE6, 0x21, /* POST_DELAY */
 	0xE6, 0x22, /* RP2P_MIN */
 	0xE6, 0x24, /* ILEAK_MAX */
 	0xE6, 0x26, /* RFB_P2P */
@@ -1249,7 +1271,8 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE6, 0x35, /* PANEL_ID0 */
 	0xE6, 0x36, /* PANEL_ID1 */
 	0xE6, 0x37, /* PANEL_ID2 */
-	0xE6, 0x38, /* Reserved56 */
+	0xE6, 0x38, /* IMO_TRIM */
+	0xE6, 0x3A, /* Reserved58 */
 	0xE6, 0x50, /* GRIP_CFG_SIZE */
 	0xE6, 0x54, /* GRIP_XEDG_A */
 	0xE6, 0x56, /* GRIP_XEDG_B */
@@ -1286,6 +1309,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE6, 0xC4, /* CA_DEFAULT_REVERT_TIME */
 	0xE6, 0xC8, /* CA_SMART_H2O_REJECT */
 	0xE6, 0xCA, /* CA_HOST_CONTROLLED_CHARGER */
+	0xE6, 0xCB, /* Reserved203 */
 	0xE6, 0xCC, /* T_COMP_BUTTON_MUTUAL_HIGH */
 	0xE6, 0xCE, /* T_COMP_BUTTON_MUTUAL_LOW */
 	0xE6, 0xD0, /* T_COMP_BUTTON_SELF_HIGH */
@@ -1332,7 +1356,9 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE7, 0x0C, /* ACT_DIST_LIFTOFF */
 	0xE7, 0x0D, /* ACT_DIST_COUNTER */
 	0xE7, 0x0E, /* ACT_DIST_Z_THRESHOLD */
-	0xE7, 0x0F, /* Reserved271 */
+	0xE7, 0x0F, /* AFH_SELF_ENABLE */
+	0xE7, 0x10, /* SELF_TX_BASELINE_CA */
+	0xE7, 0x11, /* Reserved273 */
 	0xE7, 0x30, /* CA_ALT_NUM_SUB_CONV_MUTUAL */
 	0xE7, 0x31, /* CA_ALT_ACQUISITION_FLAGS */
 	0xE7, 0x32, /* AFH_ALT_TX_PERIOD1 */
@@ -1361,7 +1387,10 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE7, 0x62, /* XY_FILT_XY_FAST_THR_CA */
 	0xE7, 0x64, /* XY_FILT_ADAPTIVE_IIR_FILTER */
 	0xE7, 0x65, /* XY_FILT_ADAPTIVE_IIR_FILTER_DISTANCE */
-	0xE7, 0x66, /* Reserved358 */
+	0xE7, 0x66, /* XY_FILT_TAP_FILTER */
+	0xE7, 0x67, /* XY_FILT_TAP_FILTER_DISTANCE_PER_FRAME */
+	0xE7, 0x68, /* XY_FILT_TAP_FILTER_TIMEOUT */
+	0xE7, 0x69, /* Reserved361 */
 	0xE7, 0x70, /* FINGER_ID_CFG_SIZE */
 	0xE7, 0x74, /* FINGER_ID_ACT_DIST2 */
 	0xE7, 0x78, /* FINGER_ID_MIN_TAPPING_DISTANCE2 */
@@ -1399,12 +1428,11 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE7, 0xAF, /* X_OUTER_EDGE_GAIN */
 	0xE7, 0xB0, /* Y_INNER_EDGE_GAIN */
 	0xE7, 0xB1, /* Y_OUTER_EDGE_GAIN */
-	0xE7, 0xB2, /* X_EDGE_COMPENSATION_GAIN */
-	0xE7, 0xB3, /* Y_EDGE_COMPENSATION_GAIN */
+	0xE7, 0xB2, /* SMALLSIG_FORBID_AFTER_TOUCH_LIFT_OFF */
 	0xE7, 0xB4, /* GLOVE_THRESH_SELF */
 	0xE7, 0xB6, /* GLOVE_THRESH_MUTUAL */
 	0xE7, 0xB8, /* GLOVE_DEBOUNCE */
-	0xE7, 0xB9, /* GLOVE_FORBID_AFTER_TOUCH_LIFT */
+	0xE7, 0xB9, /* Reserved441 */
 	0xE7, 0xBA, /* FAT_FINGER_EDGE_MAX_MF_Z_SUM */
 	0xE7, 0xBC, /* INIT_FINGER_SIZE */
 	0xE7, 0xBE, /* ESD_NEGATIVE_THRESHOLD */
@@ -1430,7 +1458,12 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE7, 0xDE, /* WATER_RAW_CALC_THOLD */
 	0xE7, 0xE0, /* WATER_DIFF_CALC_THOLD */
 	0xE7, 0xE2, /* CALC_THRESHOLD */
-	0xE7, 0xE3, /* Reserved483 */
+	0xE7, 0xE3, /* FINGERMODES_MODE_SWITCH_DEBOUNCE */
+	0xE7, 0xE4, /* FINGERMODES_FIRSTTOUCH_THOLD */
+	0xE7, 0xE6, /* FINGERMODES_FIRSTTOUCH_THOLD_SELF */
+	0xE7, 0xE8, /* FINGERMODES_GLOVE_MAXPEAK */
+	0xE7, 0xEA, /* FINGREMODES_MIN_FINGER_5X5SUM */
+	0xE7, 0xEC, /* Reserved492 */
 	0xE7, 0xF0, /* BTN_CFG_SIZE */
 	0xE7, 0xF4, /* BTN_THRSH_MUT_0 */
 	0xE7, 0xF6, /* BTN_THRSH_MUT_1 */
@@ -1451,28 +1484,30 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE8, 0x0F, /* BTN_GLOVE_FORBID_AFTER_TOUCH_LIFT */
 	0xE8, 0x10, /* BL_THR_BTN_MUT_GLOVE */
 	0xE8, 0x12, /* BL_THR_BTN_SELF_GLOVE */
-	0xE8, 0x14, /* Reserved532 */
+	0xE8, 0x14, /* SMART_BTN_ENABLED */
+	0xE8, 0x15, /* SMART_BTN_TOUCHDOWN_DEBOUNCE */
+	0xE8, 0x16, /* SMART_BTN_DISABLE_DEBOUNCE */
+	0xE8, 0x17, /* SMART_BTN_RELEASE_DEBOUNCE */
+	0xE8, 0x18, /* SMART_BTN_BOTTOM_DISTANCE_THRESHOLD */
+	0xE8, 0x19, /* SMART_BTN_Z9_THRESHOLD */
+	0xE8, 0x1B, /* Reserved539 */
 	0xE8, 0x20, /* RAW_PROC_CFG_SIZE */
 	0xE8, 0x24, /* RAW_FILTER_MASK */
 	0xE8, 0x26, /* RAW_FILT_IIR_COEFF_MUTUAL */
-	0xE8, 0x27, /* RAW_FILT_IIR_THRESHOLD_MUTUAL */
-	0xE8, 0x28, /* RAW_FILT_IIR_COEFF_SELF */
-	0xE8, 0x29, /* RAW_FILT_IIR_THRESHOLD_SELF */
-	0xE8, 0x2A, /* RAW_FILT_IIR_COEFF_BALANCED */
-	0xE8, 0x2B, /* RAW_FILT_IIR_THRESHOLD_BALANCED */
-	0xE8, 0x2C, /* RAW_FILT_IIR_COEFF_BUTTONS */
-	0xE8, 0x2D, /* RAW_FILT_IIR_THRESHOLD_BUTTONS */
-	0xE8, 0x2E, /* Reserved558 */
+	0xE8, 0x27, /* RAW_FILT_IIR_COEFF_SELF */
+	0xE8, 0x28, /* RAW_FILT_IIR_COEFF_BUTTONS */
+	0xE8, 0x29, /* Reserved553 */
+	0xE8, 0x2A, /* RAW_FILT_IIR_THRESHOLD_MUTUAL */
+	0xE8, 0x2C, /* RAW_FILT_IIR_THRESHOLD_SELF */
+	0xE8, 0x2E, /* RAW_FILT_IIR_THRESHOLD_BUTTONS */
 	0xE8, 0x30, /* RAW_FILTER_MASK_CA */
 	0xE8, 0x32, /* RAW_FILT_IIR_COEFF_MUTUAL_CA */
-	0xE8, 0x33, /* RAW_FILT_IIR_THRESHOLD_MUTUAL_CA */
-	0xE8, 0x34, /* RAW_FILT_IIR_COEFF_SELF_CA */
-	0xE8, 0x35, /* RAW_FILT_IIR_THRESHOLD_SELF_CA */
-	0xE8, 0x36, /* RAW_FILT_IIR_COEFF_BALANCED_CA */
-	0xE8, 0x37, /* RAW_FILT_IIR_THRESHOLD_BALANCED_CA */
-	0xE8, 0x38, /* RAW_FILT_IIR_COEFF_BUTTONS_CA */
-	0xE8, 0x39, /* RAW_FILT_IIR_THRESHOLD_BUTTONS_CA */
-	0xE8, 0x3A, /* Reserved570 */
+	0xE8, 0x33, /* RAW_FILT_IIR_COEFF_SELF_CA */
+	0xE8, 0x34, /* RAW_FILT_IIR_COEFF_BUTTONS_CA */
+	0xE8, 0x35, /* Reserved565 */
+	0xE8, 0x36, /* RAW_FILT_IIR_THRESHOLD_MUTUAL_CA */
+	0xE8, 0x38, /* RAW_FILT_IIR_THRESHOLD_SELF_CA */
+	0xE8, 0x3A, /* RAW_FILT_IIR_THRESHOLD_BUTTONS_CA */
 	0xE8, 0x3C, /* Reserved572 */
 	0xE8, 0x48, /* BL_DELAY_MUT */
 	0xE8, 0x49, /* BL_DELAY_SELF */
@@ -1500,7 +1535,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE8, 0x64, /* CMF_THR_BTN_MUT */
 	0xE8, 0x65, /* CMF_THR_BTN_SELF */
 	0xE8, 0x66, /* PROX_IIR_THRESHOLD */
-	0xE8, 0x68, /* PROX_IIR_COEF_SHIT */
+	0xE8, 0x68, /* PROX_IIR_COEF_SHIFT */
 	0xE8, 0x69, /* CMF_DELTA_RESET_COUNTER */
 	0xE8, 0x6A, /* BL_MUT_RESET_AXIS */
 	0xE8, 0x6B, /* Reserved619 */
@@ -1518,11 +1553,13 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xE8, 0x7F, /* XY_FILT_Z_IIR_COEFF_STYLUS */
 	0xE8, 0x80, /* XY_FILT_XY_SLOW_THR_STYLUS */
 	0xE8, 0x82, /* XY_FILT_XY_FAST_THR_STYLUS */
-	0xE8, 0x84, /* CMF_THR_MUT_STYLUS */
-	0xE8, 0x85, /* CMF_THR_SELF_STYLUS */
-	0xE8, 0x86, /* FINGER_THRESH_MUTUAL_HYST_STYLUS */
-	0xE8, 0x88, /* STYLUS_FORBID_AFTER_TOUCH_LIFT */
-	0xE8, 0x89, /* Reserved649 */
+	0xE8, 0x84, /* FINGER_THRESH_MUTUAL_HYST_STYLUS */
+	0xE8, 0x86, /* STYLUS_PALM_REJECTION_ENABLE */
+	0xE8, 0x87, /* STYLUS_TIP_SEARCH_RANGE */
+	0xE8, 0x88, /* STYLUS_FILTERCONFIG_MASK */
+	0xE8, 0x8A, /* STYLUS_PALM_TIMEOUT */
+	0xE8, 0x8C, /* STYLUS_MODE_EXIT_DELAY */
+	0xE8, 0x8D, /* Reserved653 */
 	0xE8, 0xB0, /* CDC_CFG_SIZE */
 	0xE8, 0xB4, /* TSS_CONTROL_MUT */
 	0xE8, 0xB8, /* TSS_LENGTH_MUT */
@@ -1626,7 +1663,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xEA, 0x40, /* SCALE_BUTTON */
 	0xEA, 0x44, /* LX_MODE */
 	0xEA, 0x48, /* LX_SCALE */
-	0xEA, 0x4C, /* MEDIAN_EN */
+	0xEA, 0x4C, /* ABSOLUTE_CR_CORRECTION */
 	0xEA, 0x50, /* SCANNING_MODE_MUTUAL */
 	0xEA, 0x54, /* SCANNING_MODE_BUTTON */
 	0xEA, 0x58, /* DETECT_CHARGER_THRESHOLD */
@@ -1644,7 +1681,7 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xEA, 0x65, /* SPREAD_MTX */
 	0xEA, 0x66, /* PROX_SCALE */
 	0xEA, 0x68, /* PROX_SUB_CONV */
-	0xEA, 0x69, /* SUBCONV_FILTER */
+	0xEA, 0x69, /* WINDOWING_FILTER */
 	0xEA, 0x6A, /* Reserved1130 */
 	0xEA, 0x80, /* CALIBRATION_PARAM_SIZE */
 	0xEA, 0x84, /* GLOBAL_IDAC_LSB_MUTUAL */
@@ -1679,3 +1716,4 @@ static const uint8_t cyttsp4_G700_ofilm_param_addr[] = {
 	0xED, 0xCE, /* Reserved1998 */
 	0xED, 0xFC, /* CONFIG_CRC */
 };
+

@@ -338,6 +338,8 @@ enum cyttsp4_ic_grpnum {
 #define CY_VKEYS_X 720
 #define CY_VKEYS_Y 1280
 
+#define CY_G610_NOVKEYS_X 540
+#define CY_G610_NOVKEYS_Y 960
 enum cyttsp4_flags {
 	CY_FLAG_NONE = 0x00,
 	CY_FLAG_HOVER = 0x04,

@@ -10,11 +10,17 @@
 //*****************************************************************************
 //*****************************************************************************
 //-----------------------------------------------------------------------------
+/* BEGIN 
+//add V0011 FW and config
+
+
+
+
 /* Touchscreen Parameters Endianess (Endianess: 0:Little; 1:Big)*/
-static const uint8_t cyttsp4_G610_truly_param_endianess = 0;
+static const uint8_t cyttsp4_G610_gis_param_endianess = 0;
 
 /* Touchscreen Parameters */
-static const uint8_t cyttsp4_G610_truly_param_regs[] = {
+static const uint8_t cyttsp4_G610_gis_param_regs[] = {
 /*	Value	Name	*/
 	0xFC, 0x07,  /* CONFIG_DATA_SIZE */
 	0xFC, 0x07,  /* CONFIG_DATA_MAX_SIZE */
@@ -103,8 +109,8 @@ static const uint8_t cyttsp4_G610_truly_param_regs[] = {
 	0x01, 0x00,  /* CA_SMART_H2O_REJECT */
 	0x00,  /* CA_HOST_CONTROLLED_CHARGER */
 	0x00,  /* Reserved203 */
-	0xE8, 0x03,  /* T_COMP_BUTTON_MUTUAL_HIGH */
-	0x0C, 0xFE,  /* T_COMP_BUTTON_MUTUAL_LOW */
+	0xB0, 0x04,  /* T_COMP_BUTTON_MUTUAL_HIGH */
+	0xE0, 0xFC,  /* T_COMP_BUTTON_MUTUAL_LOW */
 	0xA0, 0x00,  /* T_COMP_BUTTON_SELF_HIGH */
 	0xC4, 0xFF,  /* T_COMP_BUTTON_SELF_LOW */
 	0x0A, 0x00, 0x00, 0x00,  /* CA_NUM_SUB_CONV_BASE_SELF */
@@ -207,7 +213,7 @@ static const uint8_t cyttsp4_G610_truly_param_regs[] = {
 	0x07,  /* MIN_FAT_FINGER_SIZE */
 	0x96,  /* MAX_FAT_FINGER_SIZE_GLOVE */
 	0x96,  /* MIN_FAT_FINGER_SIZE_GLOVE */
-	0xE6, 0x00,  /* FINGER_THRESH_MUTUAL */
+	0xDC, 0x00,  /* FINGER_THRESH_MUTUAL */
 	0x96, 0x00,  /* FINGER_THRESH_SELF */
 	0x0F,  /* INNER_EDGE_GAIN */
 	0x0C,  /* OUTER_EDGE_GAIN */
@@ -474,10 +480,10 @@ static const uint8_t cyttsp4_G610_truly_param_regs[] = {
 	0x04, 0x00, 0x00, 0x00,  /* SLOTS_SELF_TX */
 	0x06, 0x00, 0x00, 0x00,  /* SLOTS_SELF */
 	0x0C, 0x00, 0x00, 0x00,  /* SLOTS_BAL */
-	0xB0, 0x04, 0x00, 0x00,  /* SCALE_MUT */
-	0xB0, 0x04, 0x00, 0x00,  /* SCALE_SELF */
+	0xE8, 0x03, 0x00, 0x00,  /* SCALE_MUT */
+	0x84, 0x03, 0x00, 0x00,  /* SCALE_SELF */
 	0x64, 0x00, 0x00, 0x00,  /* SCALE_BAL */
-	0xF4, 0x01, 0x00, 0x00,  /* SCALE_BUTTON */
+	0x5E, 0x01, 0x00, 0x00,  /* SCALE_BUTTON */
 	0x00, 0x00, 0x00, 0x00,  /* LX_MODE */
 	0x50, 0x00, 0x00, 0x00,  /* LX_SCALE */
 	0x01, 0x00, 0x00, 0x00,  /* ABSOLUTE_CR_CORRECTION */
@@ -524,11 +530,11 @@ static const uint8_t cyttsp4_G610_truly_param_regs[] = {
 	0x20, 0x03,  /* RECAL_MUTUAL_HIGH */
 	0xF8, 0xF8,  /* RECAL_MUTUAL_LOW */
 	0x20, 0x03,  /* RECAL_MUTUAL_DELTA */
-	0x74, 0x0E,  /* RECAL_SELF_HIGH */
+	0x48, 0x0D,  /* RECAL_SELF_HIGH */
 	0x18, 0xFC,  /* RECAL_SELF_LOW */
 	0x20, 0x03,  /* RECAL_SELF_DELTA */
-	0xE8, 0x03,  /* RECAL_BUTTON_MUTUAL_HIGH */
-	0x18, 0xFC,  /* RECAL_BUTTON_MUTUAL_LOW */
+	0x84, 0x03,  /* RECAL_BUTTON_MUTUAL_HIGH */
+	0x7C, 0xFC,  /* RECAL_BUTTON_MUTUAL_LOW */
 	0x2C, 0x01,  /* RECAL_BUTTON_MUTUAL_DELTA */
 	0x88, 0x13,  /* RECAL_BUTTON_SELF_HIGH */
 	0x78, 0xEC,  /* RECAL_BUTTON_SELF_LOW */
@@ -738,11 +744,11 @@ static const uint8_t cyttsp4_G610_truly_param_regs[] = {
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00,  /* Reserved1998 */
-	0xFD, 0x1B,  /* CONFIG_CRC */
+	0x22, 0x78,  /* CONFIG_CRC */
 };
 
 /* Touchscreen Parameters Field Sizes (Writable: 0:Readonly; 1:Writable) */
-static const uint16_t cyttsp4_G610_truly_param_size[] = {
+static const uint16_t cyttsp4_G610_gis_param_size[] = {
 /*	Size	Name	*/
 	2, /* CONFIG_DATA_SIZE */
 	2, /* CONFIG_DATA_MAX_SIZE */
@@ -1241,7 +1247,7 @@ static const uint16_t cyttsp4_G610_truly_param_size[] = {
 };
 
 /* Touchscreen Parameters Field Address*/
-static const uint8_t cyttsp4_G610_truly_param_addr[] = {
+static const uint8_t cyttsp4_G610_gis_param_addr[] = {
 /*	Address	Name	*/
 	0xE6, 0x00, /* CONFIG_DATA_SIZE */
 	0xE6, 0x02, /* CONFIG_DATA_MAX_SIZE */
@@ -1738,4 +1744,8 @@ static const uint8_t cyttsp4_G610_truly_param_addr[] = {
 	0xED, 0xCE, /* Reserved1998 */
 	0xED, 0xFC, /* CONFIG_CRC */
 };
+
+
+
+
 

@@ -198,6 +198,8 @@ struct input_keymap_entry {
 #define SYN_CONFIG		1
 #define SYN_MT_REPORT		2
 #define SYN_DROPPED		3
+#define SYN_TIME_SEC		4
+#define SYN_TIME_NSEC		5
 
 /*
  * Keys and buttons
@@ -748,6 +750,8 @@ struct input_keymap_entry {
 #define BTN_TRIGGER_HAPPY39		0x2e6
 #define BTN_TRIGGER_HAPPY40		0x2e7
 
+#define KEY_FCOVER_1           0x2e8
+#define KEY_FCOVER_2           0x2e9
 /* We avoid low common keys in module aliases so they don't get huge. */
 #define KEY_MIN_INTERESTING	KEY_MUTE
 #define KEY_MAX			0x2ff
@@ -1168,17 +1172,6 @@ struct ff_effect {
 #include <linux/timer.h>
 #include <linux/mod_devicetable.h>
 
-/**
- * struct input_value - input value representation
- * @type: type of value (EV_KEY, EV_ABS, etc)
- * @code: the value code
- * @value: the value
- */
-struct input_value {
-	__u16 type;
-	__u16 code;
-	__s32 value;
-};
 
 /**
  * struct input_dev - represents an input device
@@ -1256,6 +1249,7 @@ struct input_value {
  *	last user closes the device
  * @going_away: marks devices that are in a middle of unregistering and
  *	causes input_open_device*() fail with -ENODEV.
+ * @sync: set to %true when there were no new events since last EV_SYN
  * @dev: driver model's view of this device
  * @h_list: list of input handles associated with the device. When
  *	accessing the list dev->mutex must be held
@@ -1323,14 +1317,12 @@ struct input_dev {
 	unsigned int users;
 	bool going_away;
 
+	bool sync;
 	struct device dev;
 
 	struct list_head	h_list;
 	struct list_head	node;
 
-	unsigned int num_vals;
-	unsigned int max_vals;
-	struct input_value *vals;
 };
 #define to_input_dev(d) container_of(d, struct input_dev, dev)
 
@@ -1391,9 +1383,6 @@ struct input_handle;
  * @event: event handler. This method is being called by input core with
  *	interrupts disabled and dev->event_lock spinlock held and so
  *	it may not sleep
- * @events: event sequence handler. This method is being called by
- *	input core with interrupts disabled and dev->event_lock
- *	spinlock held and so it may not sleep
  * @filter: similar to @event; separates normal event handlers from
  *	"filters".
  * @match: called after comparing device's id with handler's id_table
@@ -1430,8 +1419,6 @@ struct input_handler {
 	void *private;
 
 	void (*event)(struct input_handle *handle, unsigned int type, unsigned int code, int value);
-	void (*events)(struct input_handle *handle,
-		       const struct input_value *vals, unsigned int count);
 	bool (*filter)(struct input_handle *handle, unsigned int type, unsigned int code, int value);
 	bool (*match)(struct input_handler *handler, struct input_dev *dev);
 	int (*connect)(struct input_handler *handler, struct input_dev *dev, const struct input_device_id *id);

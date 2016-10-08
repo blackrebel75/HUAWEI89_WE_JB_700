@@ -31,6 +31,8 @@
 
 static void cyttsp4_lift_all(struct cyttsp4_mt_data *md)
 {
+  if (!md->si)
+	return;
   if (md->num_prv_tch != 0) {
 	if (md->mt_function.report_slot_liftoff)
 	  md->mt_function.report_slot_liftoff(md);
@@ -372,8 +374,15 @@ static int cyttsp4_mt_attention(struct cyttsp4_device *ttsp)
 
   dev_vdbg(dev, "%s\n", __func__);
 
+  mutex_lock(&md->report_lock);
+  if (!md->is_suspended) {
   /* core handles handshake */
   rc = cyttsp4_xy_worker(md);
+  } else {
+	dev_vdbg(dev, "%s: Ignoring report while suspended\n",
+			__func__);
+  }
+  mutex_unlock(&md->report_lock);
   if (rc < 0)
 	dev_err(dev, "%s: xy_worker error r=%d\n", __func__, rc);
 
@@ -388,7 +397,9 @@ static int cyttsp4_startup_attention(struct cyttsp4_device *ttsp)
 
   dev_vdbg(dev, "%s\n", __func__);
 
+  mutex_lock(&md->report_lock);
   cyttsp4_lift_all(md);
+  mutex_unlock(&md->report_lock);
   return rc;
 }
 
@@ -418,13 +429,11 @@ static int cyttsp4_mt_open(struct input_dev *input)
 static void cyttsp4_mt_close(struct input_dev *input)
 {
   struct device *dev = input->dev.parent;
-  struct cyttsp4_mt_data *md = dev_get_drvdata(dev);
   struct cyttsp4_device *ttsp =
 	container_of(dev, struct cyttsp4_device, dev);
 
   dev_dbg(dev, "%s\n", __func__);
 
-  cyttsp4_lift_all(md);
 
   cyttsp4_unsubscribe_attention(ttsp, CY_ATTEN_IRQ,
 								cyttsp4_mt_attention, CY_MODE_OPERATIONAL);
@@ -441,16 +450,17 @@ static void cyttsp4_mt_early_suspend(struct early_suspend *h)
   struct cyttsp4_mt_data *md =
 	container_of(h, struct cyttsp4_mt_data, es);
   struct device *dev = &md->ttsp->dev;
-  int rc = 0;
+
 
   dev_dbg(dev, "%s\n", __func__);
+  
+  if (md->si){
+	mutex_lock(&md->report_lock);
+	md->is_suspended = true;
+	cyttsp4_lift_all(md);
+	mutex_unlock(&md->report_lock);
+  }
 
-	if (md->si)
-		cyttsp4_lift_all(md);
-	rc = pm_runtime_put(dev);
-	printk("cyttsp4_mt_early_suspend, rc = %d\n", rc);
-
-  md->is_suspended = true;
 }
 
 static void cyttsp4_mt_late_resume(struct early_suspend *h)
@@ -461,9 +471,9 @@ static void cyttsp4_mt_late_resume(struct early_suspend *h)
 
   dev_dbg(dev, "%s\n", __func__);
 
-	pm_runtime_get(dev);
-
+  mutex_lock(&md->report_lock);
   md->is_suspended = false;
+  mutex_unlock(&md->report_lock);
 }
 
 void cyttsp4_setup_early_suspend(struct cyttsp4_mt_data *md)
@@ -525,8 +535,9 @@ static int cyttsp4_setup_input_device(struct cyttsp4_device *ttsp)
 	max_x_tmp = CY_VKEYS_X;
 	max_y_tmp = CY_VKEYS_Y;
   } else {
-	max_x_tmp = md->si->si_ofs.max_x;
-	max_y_tmp = md->si->si_ofs.max_y;
+
+	max_x_tmp = CY_G610_NOVKEYS_X;
+	max_y_tmp = CY_G610_NOVKEYS_Y;
   }
 
   /* get maximum values from the sysinfo data */
@@ -663,6 +674,7 @@ static int cyttsp4_mt_probe(struct cyttsp4_device *ttsp)
 
 	cyttsp4_init_function_ptrs(md);
 
+	mutex_init(&md->report_lock);
 	md->prv_tch_type = CY_OBJ_STANDARD_FINGER;
 	md->ttsp = ttsp;
 	md->pdata = pdata;

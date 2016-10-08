@@ -53,7 +53,7 @@ struct cyttsp4_device_access_platform_data {
 
 #define CY_CMD_RET_PANEL_ELMNT_SZ_MASK 0x07
 
-#define I2C_BUF_MAX_SIZE 512
+#define I2C_BUF_MAX_SIZE 250
 
 enum scanDataTypeList {
 	CY_MUT_RAW,
@@ -65,6 +65,13 @@ enum scanDataTypeList {
 	CY_BAL_RAW,
 	CY_BAL_BASE,
 	CY_BAL_DIFF,
+	CY_BUTON_DATA,
+};
+
+enum check_data_type{
+	CY_CHK_MUT_RAW,
+	CY_CHK_SELF_RAW,
+	CY_CHK_BUTTON,
 };
 
 #endif /* _LINUX_CYTTSP4_DEVICE_ACCESS_H */

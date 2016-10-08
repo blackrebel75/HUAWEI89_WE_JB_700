@@ -56,6 +56,11 @@ extern void cyttsp4_mtk_gpio_interrupt_disable();
 
 #include <linux/cyttsp4_core.h>
 #include "cyttsp4_regs.h"
+#include <linux/hardware_self_adapt.h>
+#include <mach/mt_gpio.h>
+#include <mach/mt_pm_ldo.h>
+#include <cust_gpio_usage.h>
+#define GPIO_CTP_RST_PIN         GPIO140
 
 #define MTK
 /* Timeout in ms. */
@@ -72,6 +77,7 @@ extern void cyttsp4_mtk_gpio_interrupt_disable();
 #define LO_BYTE(x) (u8)((x) & 0xFF)
 #define CYTTSP4_WATCHDOG_NULL_CMD
 
+#define HUAWEI_SET_FINGER_MODE_BY_DEFAULT
 static const u8 security_key[] = {
 	0xA5, 0x01, 0x02, 0x03, 0xFF, 0xFE, 0xFD, 0x5A
 };
@@ -2586,9 +2592,28 @@ static int cyttsp4_startup_(struct cyttsp4_core_data *cd)
 
 	/* reset hardware and wait for heartbeat */
 	rc = cyttsp4_reset_and_wait(cd);
-	if (rc < 0)
+	if (rc < 0){
 		dev_err(cd->dev, "%s: Error on h/w reset r=%d\n", __func__, rc);
+		hw_product_type board_id;
+		board_id=get_hardware_product_version();
+		if((HW_G610_VER)&&(HW_G610U_VER_A))
+	  	{
+	  	mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ZERO); 
+		mdelay(100);
+	  	hwPowerDown(MT65XX_POWER_LDO_VGP5, "TP");
+		mdelay(100);
+		hwPowerOn(MT65XX_POWER_LDO_VGP5, VOL_1800, "TP");
+		mdelay(100);
+		mt_set_gpio_out(GPIO_CTP_RST_PIN, GPIO_OUT_ONE);  
+		mdelay(100);
 
+		rc = cyttsp4_reset_and_wait(cd);
+		if (rc < 0)
+		{
+			dev_err(cd->dev, "%s: Error on h/w reset2 r=%d\n", __func__, rc);
+		}
+	  	}
+	}
 	/* exit bl into sysinfo mode */
 	dev_vdbg(cd->dev, "%s: write exit ldr...\n", __func__);
 	mutex_lock(&cd->system_lock);
@@ -3436,9 +3461,9 @@ static void remove_sysfs_interfaces(struct device *dev)
 }
 
 static struct device_attribute sensitivity_attributes[] = {
-	__ATTR(signal_disparity, S_IRUGO | S_IWUSR,
+	__ATTR(signal_disparity, S_IRUGO | S_IWUSR | S_IWGRP,
 		cyttsp4_signal_disparity_show, cyttsp4_signal_disparity_store),
-	__ATTR(finger_threshold, S_IRUGO | S_IWUSR,
+	__ATTR(finger_threshold, S_IRUGO | S_IWUSR |S_IWGRP,
 		cyttsp4_finger_threshold_show, cyttsp4_finger_threshold_store),
 };
 
@@ -3550,6 +3575,7 @@ static int cyttsp4_core_probe(struct cyttsp4_core *core)
 	/* Initialize with Finger mode */
 	cd->opmode = OPMODE_FINGER;
 #endif
+      INIT_WORK(&cd->startup_work, cyttsp4_startup_work_function);
 #ifdef MTK
 	cyttsp4_event_thread = kthread_run(cyttsp4_event_handler, cd, "cyttsp4_event_handler");
 	if (IS_ERR(cyttsp4_event_thread)) { 
@@ -3584,7 +3610,7 @@ static int cyttsp4_core_probe(struct cyttsp4_core *core)
 		dev_err(cd->dev, "%s: there is no cypress device!!! rc=%d\n", __func__, rc);
         goto error_request_irq;
     }
-	INIT_WORK(&cd->startup_work, cyttsp4_startup_work_function);
+    //INIT_WORK(&cd->startup_work, cyttsp4_startup_work_function);
 
 #ifndef MTK
 	/* dev_dbg(dev, "%s: initialize threaded irq=%d\n", __func__, cd->irq); */

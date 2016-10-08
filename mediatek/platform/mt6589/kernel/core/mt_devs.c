@@ -1516,12 +1516,12 @@ int HW_TP_Init(hw_product_type board_id)
 
     printk("-- HW_TP_Init Begin --\n");
 
-    if((board_id & HW_VER_MAIN_MASK) == HW_G700_VER)
+    if((board_id & HW_VER_MAIN_MASK) == HW_G700U_VER)
     {
         cyttsp4_register_device(&cyttsp4_mt_virtualkey_info);
         cyttsp4_register_core_device(&cyttsp4_G700_core_info);
     }
-    else if((board_id & HW_VER_MAIN_MASK) == HW_G610_VER)
+    else if((board_id & HW_VER_MAIN_MASK) == HW_G610U_VER)
     {
         cyttsp4_register_device(&cyttsp4_mt_novirtualkey_info);
         cyttsp4_register_core_device(&cyttsp4_G610_core_info);
@@ -1573,7 +1573,8 @@ int hw_register_tp(void)
     hw_product_type board_id;
     board_id = get_hardware_product_version(); 
 
-    if ((NORMAL_BOOT == g_boot_mode) || (ALARM_BOOT == g_boot_mode))
+    if (((NORMAL_BOOT == g_boot_mode) || (ALARM_BOOT == g_boot_mode))
+        && ((board_id & HW_VER_MAIN_MASK) == HW_G700U_VER))
     {
         kthread_run(hw_thread_register_tp, NULL, "hw_thread_register_TP");
         return 0;
@@ -1939,12 +1940,13 @@ __init int mt6589_board_init(void)
 #else
 hw_product_type board_id;
 board_id=get_hardware_product_version();
-if((board_id & HW_VER_MAIN_MASK) == HW_G700_VER)
+//cyttsp4_register_core_device(&cyttsp4_core_info);
+if((board_id & HW_VER_MAIN_MASK) == HW_G700U_VER)
 	{
 	cyttsp4_register_device(&cyttsp4_mt_virtualkey_info);
 	cyttsp4_register_core_device(&cyttsp4_G700_core_info);
 }
-else if((board_id & HW_VER_MAIN_MASK) == HW_G610_VER)
+else if((board_id & HW_VER_MAIN_MASK) == HW_G610U_VER)
 	{
 	cyttsp4_register_device(&cyttsp4_mt_novirtualkey_info);
 	cyttsp4_register_core_device(&cyttsp4_G610_core_info);

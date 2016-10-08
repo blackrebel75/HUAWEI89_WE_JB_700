@@ -56,9 +56,11 @@
 	(defined(CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP4_PLATFORM_TTCONFIG_UPGRADE) \
 	|| defined(CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP4_MANUAL_TTCONFIG_UPGRADE))
 	*/
+
 #define OFILM 0
 #define EELY   1
 #define TRULY  2
+#define  GIS 4
 #define  MUTTO 6
 static const u8 cyttsp4_security_key[] = {
 	0xA5, 0x01, 0x02, 0x03, 0xFF, 0xFE, 0xFD, 0x5A
@@ -69,7 +71,7 @@ static const u8 cyttsp4_security_key[] = {
 	/* Timeout in ms. */
 #define CY_CMD_LDR_INIT_TIMEOUT				10000
 #define CY_LDR_REQUEST_EXCLUSIVE_TIMEOUT		5000
-#define CY_LDR_CALIBRATE_COMMAND_TIMEOUT		5000
+#define CY_LDR_CALIBRATE_COMMAND_TIMEOUT		10000
 #define CY_STATUS_SIZE_BYTE				1
 #define CY_STATUS_TYP_DELAY				2
 #define CY_CMD_TAIL_LEN					3
@@ -138,6 +140,7 @@ struct cyttsp4_loader_data {
 	bool config_loading;
 #endif
 };
+
 static char touch_info[50] = {0}; 
 struct cyttsp4_dev_id {
 	u32 silicon_id;
@@ -998,7 +1001,8 @@ static int cyttsp4_upgrade_firmware(struct cyttsp4_device *ttsp,
 	if (rc < 0) {
 		dev_err(dev, "%s: Firmware update failed with error code %d\n",
 			__func__, rc);
-	} else if (data->loader_pdata &&
+	} else{
+		if (data->loader_pdata &&
 			(data->loader_pdata->flags & CY_FLAG_AUTO_CALIBRATE)) {
 		/* set up startup call back */
 		dev_vdbg(dev, "%s: Adding callback for calibration\n",
@@ -1013,8 +1017,7 @@ static int cyttsp4_upgrade_firmware(struct cyttsp4_device *ttsp,
 			rc = 0;
 		}
 	}
-	else
-	{
+
         INIT_COMPLETION(data->sysinfo_update);
         cyttsp4_subscribe_attention(ttsp, CY_ATTEN_STARTUP,cyttsp4_sysinfo_attention, 0);
 	}/*completion of the upgrade firmware*/
@@ -1263,6 +1266,7 @@ static int cyttsp4_upgrade_ttconfig(struct cyttsp4_device *ttsp,
 {
 	struct device *dev = &ttsp->dev;
 	int rc, rc2;
+	struct cyttsp4_loader_data *data = dev_get_drvdata(dev);
 
 	dev_vdbg(dev, "%s\n", __func__);
 
@@ -1291,7 +1295,23 @@ static int cyttsp4_upgrade_ttconfig(struct cyttsp4_device *ttsp,
 				__func__, rc);
 		goto exit_setmode;
 	}
-
+	else
+	{
+		if (data->loader_pdata &&
+			(data->loader_pdata->flags & CY_FLAG_AUTO_CALIBRATE)) {
+			/* set up startup call back */
+			dev_vdbg(dev, "%s: Adding callback for calibration\n", __func__);
+			rc = cyttsp4_subscribe_attention(ttsp, CY_ATTEN_STARTUP,
+				cyttsp4_fw_calibration_attention, 0);
+			if (rc) {
+				dev_err(dev, "%s: Failed adding callback for calibration\n",
+					__func__);
+				dev_err(dev, "%s: No calibration will be performed\n",
+					__func__);
+				rc = 0;
+			}
+		}
+	}
 exit_setmode:
 	rc2 = cyttsp4_request_set_mode(ttsp, CY_MODE_OPERATIONAL);
 	if (rc2 < 0)
@@ -1441,8 +1461,6 @@ static int upgrade_ttconfig_from_platform(struct cyttsp4_device *ttsp)
 		dev_info(dev, "%s: No loader platform data\n", __func__);
 		return rc;
 	}
-   
-    dev_info(dev,"%s data->si == NULL \n",__func__);
 	pm_runtime_get_sync(dev);
 
 	data->si = cyttsp4_request_sysinfo(ttsp);
@@ -1464,8 +1482,7 @@ static int upgrade_ttconfig_from_platform(struct cyttsp4_device *ttsp)
 			break;
 		}
 	}
-	//if (NULL == param_regs)
-	//param_regs = data->loader_pdata->param_regs;
+
 	if (param_regs == NULL) {
 		dev_info(dev, "%s: No touch parameters\n", __func__);
 		return rc;
@@ -1673,13 +1690,6 @@ exit_free:
 static DEVICE_ATTR(config_loading, S_IRUSR | S_IWUSR,
 	cyttsp4_config_loading_show, cyttsp4_config_loading_store);
 #endif /* CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP4_MANUAL_TTCONFIG_UPGRADE */
-/******************************************************************************
-Function:       get_touch_module_name
-Description:   get TOUCH module name
-Input:         panel id
-Return:         panel name
-Others:         NA
-******************************************************************************/
 static char * get_touch_module_name(u8 module_id)
 {
 	switch(module_id)
@@ -1692,12 +1702,12 @@ static char * get_touch_module_name(u8 module_id)
 			return "TRULY";
 		case MUTTO:
 			return "MUTTO";
-		
+		case GIS:
+			return "GIS";
 	       default:
 			return "unknow";
 	}
 }
-	
 static void cyttsp4_fw_and_config_upgrade(
 		struct work_struct *fw_and_config_upgrade)
 {
@@ -1736,18 +1746,25 @@ static void cyttsp4_fw_and_config_upgrade(
 		dev_info(dev,"%s sysinfo is ok\n",__func__);  
     }
 #endif
+
 #ifdef CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP4_PLATFORM_TTCONFIG_UPGRADE
 	if (!upgrade_ttconfig_from_platform(ttsp))
 	{
-		dev_info(dev,"%s upgrade_config_from_platform finished \n",__func__ );   
+		 dev_info(dev,"%s upgrade_config_from_platform finished \n",__func__ );   
 	}
 		//return;
 #endif
     data->si = cyttsp4_request_sysinfo(ttsp);
+    if (data->si == NULL)
+   {
+	dev_err(dev, "%s: Fail get sysinfo pointer from core\n",
+		__func__);
+	return;
+    }
     pannel_id = data->si->si_ptrs.pcfg->panel_info0;
     module_name = get_touch_module_name(pannel_id);
     sprintf(touch_info,"CYPRESS_TMA463_%s.%d",module_name,(data->si->ttconfig.version&0XFF));
-   dev_info(dev,"%s,%s\n",__func__,touch_info);   
+    dev_info(dev,"%s,%s\n",__func__,touch_info);
     set_id_value(TP_ID, touch_info);
     return;
 }
@@ -1764,7 +1781,20 @@ static ssize_t cyttsp4_manual_upgrade_store(struct device *dev,
 static DEVICE_ATTR(manual_upgrade, S_IRUSR | S_IWUSR,
 	NULL, cyttsp4_manual_upgrade_store);
 #endif
-
+static ssize_t cyttsp4_fw_calibration_store(struct device *dev,
+		struct device_attribute *attr, const char *buf, size_t size)
+{
+     struct cyttsp4_loader_data *data = dev_get_drvdata(dev);
+     printk("#################cyttsp4_fw_calibration_store enter######################\n");
+     if ( buf[0] == '1')
+     {
+         printk("#################cyttsp4_fw_calibration begin######################\n");
+         cyttsp4_fw_calibrate(&(data->calibration_work)); 
+     }
+    return size;
+}
+static DEVICE_ATTR(fw_calibration, S_IRUSR | S_IWUSR | S_IWGRP,
+	NULL, cyttsp4_fw_calibration_store);
 static int cyttsp4_loader_probe(struct cyttsp4_device *ttsp)
 {
 	struct cyttsp4_loader_data *data;
@@ -1803,7 +1833,12 @@ static int cyttsp4_loader_probe(struct cyttsp4_device *ttsp)
 		goto error_create_config_data;
 	}
 #endif
-
+    rc = device_create_file(dev, &dev_attr_fw_calibration);
+	if (rc) {
+		dev_err(dev, "%s: Error, could not create fw_calibration\n",
+				__func__);
+		goto error_create_fw_calibration;
+	}
 	data->loader_pdata = cyttsp4_request_loader_pdata(ttsp);
 	data->ttsp = ttsp;
 	dev_set_drvdata(dev, data);
@@ -1830,7 +1865,10 @@ static int cyttsp4_loader_probe(struct cyttsp4_device *ttsp)
 
 	dev_info(dev, "%s: Successful probe %s\n", __func__, ttsp->name);
 	return 0;
-
+error_create_fw_calibration:
+#ifdef CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP4_MANUAL_TTCONFIG_UPGRADE
+      device_remove_bin_file(dev, &bin_attr_config_data);
+#endif
 
 #ifdef CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP4_MANUAL_TTCONFIG_UPGRADE
 error_create_config_data:
@@ -1875,6 +1913,7 @@ static int cyttsp4_loader_release(struct cyttsp4_device *ttsp)
 #ifdef CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP4_BINARY_FW_UPGRADE
 	device_remove_file(dev, &dev_attr_manual_upgrade);
 #endif
+    device_remove_file(dev, &dev_attr_fw_calibration);
 	dev_set_drvdata(dev, NULL);
 	kfree(data);
 	return retval;
@@ -1950,7 +1989,7 @@ static int __init cyttsp4_loader_init(void)
 	return 0;
 
 fail_unregister_devices:
-	for (i--; i <= 0; i--) {
+	for (i--; i >= 0; i--) {
 		cyttsp4_unregister_device(cyttsp4_loader_infos[i].name,
 			cyttsp4_loader_infos[i].core_id);
 		pr_info("%s: Unregistering loader device for core_id: %s\n",

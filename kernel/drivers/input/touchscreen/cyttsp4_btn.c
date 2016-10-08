@@ -58,6 +58,7 @@ struct cyttsp4_btn_data {
 	struct early_suspend es;
 	bool is_suspended;
 #endif
+	struct mutex report_lock;
 	bool input_device_registered;
 	char phys[NAME_MAX];
 	u8 pr_buf[CY_MAX_PRBUF_SIZE];
@@ -126,7 +127,7 @@ static void cyttsp4_btn_lift_all(struct cyttsp4_btn_data *bd)
 	struct cyttsp4_sysinfo *si = bd->si;
 	int btn_reg;
 	int num_regs;
-	if (si->si_ofs.num_btns == 0)
+	if (!si || si->si_ofs.num_btns == 0)
 		return;
 
 	num_regs = (si->si_ofs.num_btns + CY_NUM_BTN_PER_REG - 1)
@@ -210,8 +211,15 @@ static int cyttsp4_btn_attention(struct cyttsp4_device *ttsp)
 
 	dev_vdbg(dev, "%s\n", __func__);
 
-	/* core handles handshake */
-	rc = cyttsp4_xy_worker(bd);
+	mutex_lock(&bd->report_lock);
+	if (!bd->is_suspended) {
+		/* core handles handshake */
+		rc = cyttsp4_xy_worker(bd);
+	} else {
+		dev_vdbg(dev, "%s: Ignoring report while suspended\n",
+			__func__);
+	}
+	mutex_unlock(&bd->report_lock);
 	if (rc < 0)
 		dev_err(dev, "%s: xy_worker error r=%d\n", __func__, rc);
 
@@ -259,13 +267,11 @@ int cyttsp4_btn_open(struct input_dev *input)
 void cyttsp4_btn_close(struct input_dev *input)
 {
 	struct device *dev = input->dev.parent;
-	struct cyttsp4_btn_data *bd = dev_get_drvdata(dev);
 	struct cyttsp4_device *ttsp =
 		container_of(dev, struct cyttsp4_device, dev);
 
 	dev_dbg(dev, "%s\n", __func__);
 
-	cyttsp4_btn_lift_all(bd);
 
 	cyttsp4_unsubscribe_attention(ttsp, CY_ATTEN_IRQ,
 		cyttsp4_btn_attention, CY_MODE_OPERATIONAL);
@@ -285,11 +291,12 @@ static void cyttsp4_btn_early_suspend(struct early_suspend *h)
 
 	dev_dbg(dev, "%s\n", __func__);
 
-	if (bd->si)
+	if (bd->si){
+		mutex_lock(&bd->report_lock);
+		bd->is_suspended = true;
 		cyttsp4_btn_lift_all(bd);
-	pm_runtime_put(dev);
-
-	bd->is_suspended = true;
+		mutex_unlock(&bd->report_lock);
+		}
 }
 
 static void cyttsp4_btn_late_resume(struct early_suspend *h)
@@ -300,9 +307,9 @@ static void cyttsp4_btn_late_resume(struct early_suspend *h)
 
 	dev_dbg(dev, "%s\n", __func__);
 
-	pm_runtime_get_sync(dev);
-
+	mutex_lock(&bd->report_lock);
 	bd->is_suspended = false;
+	mutex_unlock(&bd->report_lock);
 }
 #endif
 
@@ -396,6 +403,7 @@ static int cyttsp4_btn_probe(struct cyttsp4_device *ttsp)
 		goto error_alloc_data_failed;
 	}
 
+	mutex_init(&bd->report_lock);
 	bd->ttsp = ttsp;
 	bd->pdata = pdata;
 	dev_set_drvdata(dev, bd);
