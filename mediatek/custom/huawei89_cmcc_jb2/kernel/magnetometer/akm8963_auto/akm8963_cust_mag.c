@@ -49,7 +49,7 @@ static struct mag_hw cust_mag_hw = {
 struct mag_hw* akm8963_get_cust_mag_hw(void)
 {
     hw_product_type boardType = get_hardware_product_version();
-    if((boardType & HW_VER_MAIN_MASK) == HW_G700_VER)
+    if((boardType & HW_VER_MAIN_MASK) == HW_G700U_VER)
         cust_mag_hw.direction=7;
     return &cust_mag_hw;
 }
