@@ -281,7 +281,7 @@ static int get_tmd2771_register(struct tmd2771_priv  *aps, u8 reg, int flag)
  * DF:Device Factor
  * alsGain: ALS Gain
  * aTime: ALS Timing
- * ALSIT = 2.72ms * (256 ¨C ATIME) = 2.72ms * (256-0xDB) =  100ms
+ * ALSIT = 2.72ms * (256 áº€C ATIME) = 2.72ms * (256-0xDB) =  100ms
  */
 
 /*
@@ -1614,29 +1614,29 @@ static int tmd2771_i2c_probe(struct i2c_client *client, const struct i2c_device_
 
     hw_product_type board_id;
 	board_id=get_hardware_product_version();
-	if((board_id & HW_VER_MAIN_MASK) == HW_G700_VER)
+	if((board_id & HW_VER_MAIN_MASK) == HW_G700U_VER)
 	{
-	    min_proximity_value = TMD2771_G700T_MIN_PRO_VALUE;
-	    pwin_value = TMD2771_G700T_PWINDOWS_VALUE;
-	    pwave_value = TMD2771_G700T_PWAVE_VALUE;
+	    min_proximity_value = TMD2771_G700U_MIN_PRO_VALUE;
+	    pwin_value = TMD2771_G700U_PWINDOWS_VALUE;
+	    pwave_value = TMD2771_G700U_PWAVE_VALUE;
 	    ps_cali.valid = 1;
 	    ps_cali.close = 960;
-	    ps_cali.far_away = 960 -TMD2771_G700T_PWINDOWS_VALUE ;
+	    ps_cali.far_away = 960 -TMD2771_G700U_PWINDOWS_VALUE ;
 	    scacle_factor_vasible = 8;
 	    scacle_factor_ir = 3;
-	    TMD2771_CMM_PPCOUNT_VALUE = TMD2771_G700T_CMM_PPCOUNT_VALUE;
+	    TMD2771_CMM_PPCOUNT_VALUE = TMD2771_G700U_CMM_PPCOUNT_VALUE;
 	}
-	else if((board_id & HW_VER_MAIN_MASK) == HW_G610_VER)
+	else if((board_id & HW_VER_MAIN_MASK) == HW_G610U_VER)
 	{
-	    min_proximity_value = TMD2771_G610T_MIN_PRO_VALUE;
-	    pwin_value = TMD2771_G610T_PWINDOWS_VALUE;
-	    pwave_value = TMD2771_G610T_PWAVE_VALUE;
+	    min_proximity_value = TMD2771_G610U_MIN_PRO_VALUE;
+	    pwin_value = TMD2771_G610U_PWINDOWS_VALUE;
+	    pwave_value = TMD2771_G610U_PWAVE_VALUE;
 	    ps_cali.valid = 1;
 	    ps_cali.close = 960;
-	    ps_cali.far_away = 960 -TMD2771_G610T_PWINDOWS_VALUE ;
+	    ps_cali.far_away = 960 -TMD2771_G610U_PWINDOWS_VALUE ;
 	    scacle_factor_vasible = 8;
 	    scacle_factor_ir = 3;
-	    TMD2771_CMM_PPCOUNT_VALUE = TMD2771_G610T_CMM_PPCOUNT_VALUE;
+	    TMD2771_CMM_PPCOUNT_VALUE = TMD2771_G610U_CMM_PPCOUNT_VALUE;
 	}
 	else
 	{
