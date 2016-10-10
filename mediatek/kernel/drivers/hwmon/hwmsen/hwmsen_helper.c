@@ -101,7 +101,6 @@ int hwmsen_clr_bits(struct i2c_client *client, u8 addr, u8 bits)
 /*----------------------------------------------------------------------------*/
 EXPORT_SYMBOL_GPL(hwmsen_clr_bits);
 /*----------------------------------------------------------------------------*/
-#if 0
 int hwmsen_read_byte(struct i2c_client *client, u8 addr, u8 *data)
 {
     u8 buf;
@@ -123,25 +122,6 @@ int hwmsen_read_byte(struct i2c_client *client, u8 addr, u8 *data)
 #endif
     }
     *data = buf;
-    return 0;
-}
-#endif
-int hwmsen_read_byte(struct i2c_client *client, u8 addr, u8 *data)
-{
-u8 buf;
-int ret = 0;
-
-client->addr = client->addr& I2C_MASK_FLAG | I2C_WR_FLAG |I2C_RS_FLAG;
-buf = addr;
-ret = i2c_master_send(client, (const char*)&buf, 1<<8 | 1);
-//ret = i2c_master_send(client, (const char*)&buf, 1);
-if (ret < 0) {
-HWM_ERR("send command error!!\n");
-return -EFAULT;
-}
-
-*data = buf;
-client->addr = client->addr& I2C_MASK_FLAG;
 return 0;
 }
 /*----------------------------------------------------------------------------*/
