@@ -1,4 +1,36 @@
 #/bin/bash
+DATA=$(date +%Y-%m-%d_%H.%M)
+if [ $1 = 'cm12-jb' ] ; 
+then
+RAMDISK='cm12-jb'
+NAME='CM12_JB'
+fi
+if [ $1 = 'cm12.1_md' ] ; 
+then
+RAMDISK='cm12.1_md'
+NAME='CM12.1_JB_MD'
+fi
+if [ $1 = 'cmb' ] ; 
+then
+RAMDISK='cm12_fly'
+NAME='CM12_new'
+fi
+if [ $1 = 'rr' ] ; 
+then
+RAMDISK='cm12_rr'
+NAME='CM12_RR'
+fi
+if [ $1 = 'jb' ];
+then
+RAMDISK='4.2.1-ramdisk'
+NAME='JB_4.2.1'
+fi
+if [ $1 = 'll' ]; 
+then
+RAMDISK='lollikat-ramdisk'
+NAME='LOLLIKAT'
+fi
+FILENAME=$NAME'-kernel_'$DATA	
 rm -R ./out/modules/*
 cp ./kernel/out/mediatek/kernel/drivers/combo/drv_wlan/mt6628/wlan/wlan_mt6628.ko ./out/modules
 cp ./kernel/out/mediatek/kernel/drivers/combo/common/mtk_stp_gps.ko ./out/modules
@@ -22,9 +54,9 @@ cp ./kernel/out/drivers/scsi/scsi_tgt.ko ./out/modules
 cp ./kernel/out/drivers/scsi/scsi_wait_scan.ko ./out/modules
 cp ./kernel/out/fs/cifs/cifs.ko ./out/modules
 cp ./kernel/out/kernel_huawei89_cmcc_jb2.bin ./out/zImage
-./mtk-tools/repack-MTK.pl -boot --debug ./out/zImage ./mtk-tools/cm12-ramdisk/ ./out/boot.img
+./mtk-tools/repack-MTK.pl -boot --debug ./out/zImage ./mtk-tools/$RAMDISK/ ./out/boot.img
 cp ./out/modules/* ./bootimg/system/lib/modules
 cp ./out/boot.img ./bootimg
 cd ./bootimg
-zip -r -0 "kernel-update.zip" ./*
-mv kernel-update.zip ../
+zip -r -0 "kernel.zip" ./*
+mv kernel.zip ../out/$1/$FILENAME.zip
