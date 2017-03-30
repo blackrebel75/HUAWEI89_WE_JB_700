@@ -306,6 +306,7 @@ kal_int32 gFG_BATT_CAPACITY_init_high_current = 1200;
 kal_int32 gFG_BATT_CAPACITY_aging = 1200;
 int volt_mode_update_timer=0;
 int volt_mode_update_time_out=6; //1mins
+kal_int32 g_rtc_fg_soc = 0;
 
 #define AGING_TUNING_VALUE 103
 
@@ -1080,8 +1081,6 @@ kal_int32 fgauge_compensate_battery_voltage_recursion(kal_int32 ori_voltage, kal
             temp_voltage_1, temp_voltage_2, gFG_resistance_bat, ret_compensate_value);
     }
 
-    //xlog_printk(ANDROID_LOG_DEBUG, "Power/Battery", "[CompensateVoltage] Ori_voltage:%d, compensate_value:%d, gFG_resistance_bat:%d, gFG_current:%d\r\n", 
-    //    ori_voltage, ret_compensate_value, gFG_resistance_bat, gFG_current);
 
     return ret_compensate_value;
 }
@@ -1617,9 +1616,9 @@ kal_int32 fgauge_read_capacity(kal_int32 type)
     gFG_temp = fgauge_read_temperature();
     C_0mA = fgauge_get_Q_max(gFG_temp);
     C_400mA = fgauge_get_Q_max_high_current(gFG_temp);
-    if(C_0mA > C_400mA)
+    if((C_0mA > C_400mA) && (gFG_capacity_by_v == g_rtc_fg_soc))
     {
-        dvalue_new = (100-dvalue) - ( ( (C_0mA-C_400mA) * (dvalue) ) / C_400mA );
+        dvalue_new = (100-dvalue) - ( ( (C_0mA-C_400mA) * (dvalue) ) / C_0mA );
         dvalue = 100 - dvalue_new;
     }
     if (Enable_FGADC_LOG == 1){
@@ -2215,10 +2214,9 @@ kal_int32 gFG_voltageVBAT=0;
 #if defined(CHANGE_TRACKING_POINT)
 int g_tracking_point = CUST_TRACKING_POINT;
 #else
-int g_tracking_point = 14;
+int g_tracking_point = 1; //2014/1/7-maoyichou, Fix battery capacity fast drainage.
 #endif
 
-kal_int32 g_rtc_fg_soc = 0;
 extern int get_rtc_spare_fg_value(void);
 
 void fgauge_Normal_Mode_Work(void)
@@ -2303,7 +2301,7 @@ void fgauge_Normal_Mode_Work(void)
 //2. Calculate battery capacity by VBAT    
     gFG_capacity_by_v = fgauge_read_capacity_by_v();
 
-	if(gFG_booting_counter_I_FLAG == 0) {
+	if(gFG_booting_counter_I_FLAG == 1) { 
 		gFG_capacity_by_v_init = gFG_capacity_by_v;
 	}
 //3. Calculate battery capacity by Coulomb Counter
@@ -2320,10 +2318,12 @@ void fgauge_Normal_Mode_Work(void)
         gFG_capacity_by_v = fgauge_read_capacity_by_v();
 		xlog_printk(ANDROID_LOG_INFO, "Power/Battery", "[FGADC] get_hw_ocv=%d, HW_SOC=%d, SW_SOC = %d\n", 
 			gFG_voltage, gFG_capacity_by_v, gFG_capacity_by_v_init);
-		// compare with hw_ocv & sw_ocv, check if less than or equal to 5% tolerance 
-		if (abs(gFG_capacity_by_v_init - gFG_capacity_by_v) > 5) {
+				// compare with hw_ocv & sw_ocv, check if less than or equal to 25mV tolerance 
+				if (abs(gFG_voltageVBAT - gFG_voltage) > 25) {
 			gFG_capacity_by_v = gFG_capacity_by_v_init;
 		}
+				xlog_printk(ANDROID_LOG_INFO, "Power/Battery", "[FGADC] SW_VBAT=%d, HW_VBAT=%d, gFG_capacity_by_v = %d\n", 
+				gFG_voltageVBAT, gFG_voltage, gFG_capacity_by_v);
         //-------------------------------------------------------------------------------
         g_rtc_fg_soc = get_rtc_spare_fg_value();
         if(g_rtc_fg_soc >= gFG_capacity_by_v)
@@ -2380,11 +2380,15 @@ void fgauge_Normal_Mode_Work(void)
         //gFG_15_vlot = fgauge_read_v_by_capacity(86); //14%
         gFG_15_vlot = fgauge_read_v_by_capacity( (100-g_tracking_point) );
         xlog_printk(ANDROID_LOG_INFO, "Power/Battery", "[FGADC] gFG_15_vlot = %dmV\r\n", gFG_15_vlot);        
+		//<2014/1/7-maoyichou, Fix battery capacity fast drainage.
+		#if 0
         if( (gFG_15_vlot > 3800) || (gFG_15_vlot < 3600) ) 
         {
             xlog_printk(ANDROID_LOG_INFO, "Power/Battery", "[FGADC] gFG_15_vlot(%d) over range, reset to 3700\r\n", gFG_15_vlot);
             gFG_15_vlot = 3700;
         }
+		#endif
+		//>2014/1/7-maoyichou, Fix battery capacity fast drainage.
         #endif        
 
         //double check
@@ -2616,7 +2620,6 @@ void fgauge_initialization(void)
     gFG_columb = fgauge_read_columb();
     gFG_temp = fgauge_read_temperature();
     gFG_capacity = fgauge_read_capacity(0);         
-
     gFG_columb_init = gFG_columb;
     gFG_capacity_by_c_init = gFG_capacity;
     gFG_capacity_by_c = gFG_capacity;
@@ -2803,7 +2806,7 @@ void fg_voltage_mode(void)
     }
     else
     {
-        /* SOC only Done when dis-charging */
+        /* SOC only DOWN when dis-charging */
         if ( gFG_capacity_by_v < gfg_percent_check_point ) {            
             gfg_percent_check_point--;
         }
