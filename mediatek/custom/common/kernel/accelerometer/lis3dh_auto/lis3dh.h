@@ -23,7 +23,7 @@
 #define LIS3DH_H
 	 
 #include <linux/ioctl.h>
-//extern struct acc_hw* lis3dh_get_cust_acc_hw(void) ;
+extern struct acc_hw* lis3dh_get_cust_acc_hw(void) ;
 
 #define LIS3DH_I2C_SLAVE_ADDR		0x32//0x30<-> SD0=GND;0x32<-> SD0=High
 	 

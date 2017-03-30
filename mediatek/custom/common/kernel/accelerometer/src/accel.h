@@ -54,7 +54,7 @@ struct acc_control_path
 
 struct acc_data_path
 {
-	int (*get_data)(int *x,int *y, int *z,int *status);
+	int (*get_data)(int x,int y, int z,int status);
 	int vender_div;
 };
 
