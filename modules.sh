@@ -1,34 +1,24 @@
 #/bin/bash
 DATA=$(date +%Y-%m-%d_%H.%M)
-if [ $1 = 'cm12-jb' ] ; 
+if [ $1 = 'cm12.1' ] ; 
 then
-RAMDISK='cm12-jb'
-NAME='CM12_JB'
+RAMDISK='cm12.1'
+NAME='CM12.1'
 fi
-if [ $1 = 'cm12.1_md' ] ; 
+if [ $1 = 'cm12.1_em' ] ; 
 then
-RAMDISK='cm12.1_md'
-NAME='CM12.1_JB_MD'
+RAMDISK='cm12.1_em'
+NAME='CM12.1_JB_EM'
 fi
-if [ $1 = 'cmb' ] ; 
+if [ $1 = 'b143' ] ; 
 then
-RAMDISK='cm12_fly'
-NAME='CM12_new'
-fi
-if [ $1 = 'rr' ] ; 
-then
-RAMDISK='cm12_rr'
-NAME='CM12_RR'
+RAMDISK='b143'
+NAME='b143'
 fi
 if [ $1 = 'jb' ];
 then
 RAMDISK='4.2.1-ramdisk'
 NAME='JB_4.2.1'
-fi
-if [ $1 = 'll' ]; 
-then
-RAMDISK='lollikat-ramdisk'
-NAME='LOLLIKAT'
 fi
 FILENAME=$NAME'-kernel_'$DATA	
 rm -R ./out/modules/*
