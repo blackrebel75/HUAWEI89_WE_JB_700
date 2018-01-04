@@ -5,10 +5,10 @@ then
 RAMDISK='cm12.1'
 NAME='CM12.1'
 fi
-if [ $1 = 'cm12.1_em' ] ; 
+if [ $1 = 'los12.1' ] ; 
 then
-RAMDISK='cm12.1_em'
-NAME='CM12.1_JB_EM'
+RAMDISK='los12.1'
+NAME='LOS12.1'
 fi
 if [ $1 = 'b143' ] ; 
 then
