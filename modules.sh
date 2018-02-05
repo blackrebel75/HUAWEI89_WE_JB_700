@@ -10,6 +10,11 @@ then
 RAMDISK='los12.1'
 NAME='LOS12.1'
 fi
+if [ $1 = 'los12.1_em' ] ; 
+then
+RAMDISK='los12.1_em'
+NAME='LOS12.1_EM'
+fi
 if [ $1 = 'b143' ] ; 
 then
 RAMDISK='b143'
